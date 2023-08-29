@@ -19,6 +19,8 @@ public class ImageFormServlet extends HttpServlet {
 	
 	private File imageFolder;
 	private ServletContext application;
+	//ServletContext는 웹 애플리케이션의 컨텍스트 정보를 담고 있으며, 
+	//서블릿들 간의 정보 공유나 애플리케이션 수준의 설정 등을 처리하는 데 사용됩니다.
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -27,6 +29,7 @@ public class ImageFormServlet extends HttpServlet {
 		application = getServletContext();
 		String value=application.getInitParameter("imageFolder");	
 		imageFolder = new File(value);
+		//web.xml 파일이나 어노테이션을 통해 설정한 초기화 매개변수를 읽어오는 것입니다.
 		
 	}
 	
