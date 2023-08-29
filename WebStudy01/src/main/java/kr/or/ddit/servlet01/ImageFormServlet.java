@@ -51,14 +51,15 @@ public class ImageFormServlet extends HttpServlet {
 				content.append("<html>");
 				content.append("<body>");
 				content.append(String.format("<form onsubmit='submitHandler(event);' action='%s/image.do'>", req.getContextPath()));
-				content.append("<select name='image' onchange='this.form.requestsubmit();' >");
+				content.append("<select name='image' onchange='this.form.requestsubmit();' >"); 
+				//requestsubmit() 폼 제출하는 메서드! 서버로 전송되어 해당 URL로 요청이 보내짐
 				content.append(options);
 				content.append("</select>");
 				content.append("<input type='submit' value='전송'>");
 				content.append("</form>");
 				content.append("<script>                           ");
-				content.append("	function submitHandler(event) {");
-				content.append("		event.preventDefault();    ");
+				content.append("	function submitHandler(event) {"); //event 매개변수를 통해 이벤트 정의
+				content.append("		event.preventDefault();    ");  //기본 이벤트 동작을 취소(여기서는 폼 제출 동작 막음)
 				content.append("<img >  ");
 				
 				content.append("		                           ");
