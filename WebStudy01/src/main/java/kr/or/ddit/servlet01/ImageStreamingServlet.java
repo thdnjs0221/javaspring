@@ -47,7 +47,7 @@ public class ImageStreamingServlet extends HttpServlet {
        
  
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String imageName=request.getParameter("image");  // ImageFormServlet name 파라미터
+		String imageName=request.getParameter("image");
 		//이미지는 바이트단위 사용
 		
 		if(imageName==null || imageName.isEmpty()) {
@@ -56,7 +56,7 @@ public class ImageStreamingServlet extends HttpServlet {
 		}
 		
 		
-		File imageFile=new File (imageFolder,imageName); //파일경로,파일
+		File imageFile=new File (imageFolder,imageName);
 		
 		if(!imageFile.exists()) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,MessageFormat.format("{0} 이미지 파일이 없음", imageName));
@@ -77,8 +77,8 @@ public class ImageStreamingServlet extends HttpServlet {
 		//종료조건 -1 /EOF(End of File) 문자를 만날때까지 반복 작업
 		byte[] buffer = new byte[1024]; //전송 효율을 높이기 위해 buffer 사용
 		int length = -1;
-		while((length=fis.read(buffer)) != -1) {  //// fis 객체에서 buffer 변수에 데이터를 읽습니다. length 변수는 fis 객체에서 읽은 데이터의 크기를 저장합니다. length 변수가 -1이면 fis 객체에서 더 이상 읽을 데이터가 없다는 의미입니다.
-			sos.write(buffer,0,length); //buffer에 데이터가 존재 //buffer 변수의 0번 인덱스부터 length만큼의 데이터를 전송
+		while((length=fis.read(buffer)) != -1) {
+			sos.write(buffer,0,length); //buffer에 데이터가 존재
 		}
 		
 		sos.flush();

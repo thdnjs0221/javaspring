@@ -44,6 +44,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 public class DescriptionServlet extends HttpServlet{
+	
+	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config); //init은 super삭제 금지
