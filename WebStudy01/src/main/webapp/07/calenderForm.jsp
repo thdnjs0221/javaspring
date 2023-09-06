@@ -50,7 +50,7 @@
  	Locale locale = request.getLocale();
 
 %>
-<!-- html 요소들은 다 클라이언트사이드 -->
+<!-- html 요소들은 다 클라이언트사이드라 경로 <%=request.getContextPath() %>/calender -->
 <form id="calForm"  method="post"
 action="<%=request.getContextPath() %>/calender"
 >
