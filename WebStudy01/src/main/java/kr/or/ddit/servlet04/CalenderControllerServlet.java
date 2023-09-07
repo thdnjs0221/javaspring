@@ -1,4 +1,4 @@
-package kr.dr.ddit.servlet04;
+package kr.or.ddit.servlet04;
 
 import java.io.IOException;
 import java.time.Year;
