@@ -7,6 +7,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ public class BtsContentControllerServlet extends HttpServlet {
 		super.init(config);
 		application=getServletContext();
 	}
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//
@@ -35,7 +36,7 @@ public class BtsContentControllerServlet extends HttpServlet {
 		System.out.printf("selected member: %s\n",memCode);
 	
 		
-		//검증
+		//검증!!!!!
 		if(memCode==null || memCode.trim().isEmpty()) {
 			resp.sendError(400,"멤버 코드가 없음");			
 			return;
@@ -46,6 +47,13 @@ public class BtsContentControllerServlet extends HttpServlet {
 			resp.sendError(404,String.format("%s에 해당하는 멤버는 없음", memCode));
 			return;
 		}
+		
+		//검증하고 나서 쿠키 생성
+		Cookie btsCookie = new Cookie("btsCookie", memCode);
+		btsCookie.setMaxAge(60*60*24*3); //3일
+		btsCookie.setPath(req.getContextPath()+"/bts");
+		resp.addCookie(btsCookie);
+		
 		
 		String[] memRec =  btsMap.get(memCode);
 		
