@@ -26,6 +26,11 @@
    2. 드라이버(클래스) 로딩
    3. Connection 생성
    4. 쿼리 객체 생성
+    - Statement : 쿼리 객체 생성시 뭐리가 고정되지 않기 때문에, runtime에 동적쿼리 실행 가능
+    - PerparedStatement(선컴파일된 쿼리 객체) :  쿼리를 미리 컴파일 하고 뭐리 객체를 생성함.
+    					runtime에 쿼리에 사용되는 literal(값)을 변경하여 쿼리를 재사용함.
+    - CallableStatement : 절차적 코드집합인 function/procedure를 호출할때 사용함.
+
    5. 쿼리 실행
    6. 결과 집합 핸들링(select..)
    7. close(***) - try with resource 구문 활용

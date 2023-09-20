@@ -9,7 +9,7 @@
 <% 
 String message = (String)session.getAttribute("message");
 session.removeAttribute("message"); //**flash attribute
-if(message!=null && message.trim().isEmpty()){
+if(message!=null && !message.trim().isEmpty()){
 	
 %>
 <script>
