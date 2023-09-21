@@ -60,7 +60,7 @@ class ReflectionDesc {
 	}
 
 	//@Test
-	void test() {
+	void test1() {
 		Object obj =  ReflectionTest.getObject();
 		System.out.println(obj);
 		Class<?>objType = obj.getClass();

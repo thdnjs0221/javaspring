@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(of = "memId")
 @ToString
-public class MemberVO2 implements Serializable{
+public class MemberVO implements Serializable{
 	private String memId;
 	@ToString.Exclude //toString 제외
 	@JsonIgnore  //마샬링 제외

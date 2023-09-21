@@ -3,7 +3,7 @@ package kr.or.ddit.adrs.service;
 import java.util.List;
 
 import kr.or.ddit.adrs.dao.AddressDAO;
-import kr.or.ddit.member.dao.AddressDAOImpl;
+import kr.or.ddit.adrs.dao.AddressDAOImpl;
 import kr.or.ddit.vo.AddressVO;
 
 public class AddressServiceImpl implements AddressService {
@@ -16,7 +16,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	
-	//@@
+	
 	@Override
 	public List<AddressVO> retriveAddressList(String memId) {
 		
@@ -31,8 +31,8 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public boolean removeAddress(int adrsNo) {
-		// TODO Auto-generated method stub
-		return false;
+		return dao.deleteAddress(adrsNo) >0;
+		 
 	}
 
 }

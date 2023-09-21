@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+
 /**
  * A a1 = new A();
  * A a2 = new A();
@@ -21,9 +23,9 @@ import java.util.Properties;
  *   
  * */
 public class ConnectionFactory {
-	private static String url;
-	private static String user;
-	private static String password;
+
+	private static BasicDataSource dataSource;
+
 	static{
 		Properties dbInfo = new Properties();
 //		classpath resourse 형태 자원 읽기
@@ -34,17 +36,46 @@ public class ConnectionFactory {
 		) {
 			dbInfo.load(is);
 			String driverClassName = dbInfo.getProperty("driverClassName");
-			Class.forName(driverClassName);
-			url = dbInfo.getProperty("url");
-			user = dbInfo.getProperty("user");
-			password = dbInfo.getProperty("password");
-		} catch (ClassNotFoundException | IOException e) {
+			//Class.forName(driverClassName);
+			String url = dbInfo.getProperty("url");
+			String user = dbInfo.getProperty("user");
+			String password = dbInfo.getProperty("password");
+			
+			dataSource = new BasicDataSource();
+			dataSource.setDriverClassName(driverClassName);
+			dataSource.setUrl(url);
+			dataSource.setUsername(user);
+			dataSource.setPassword(password);
+//			initialSize=2
+//			maxIdle=2
+//			maxTotal=3
+//			maxWait=2000
+					
+			int initialSize = Integer.parseInt(dbInfo.getProperty("initialSize")) ;
+			int maxIdle = Integer.parseInt(dbInfo.getProperty("maxIdle")) ;
+			int maxTotal = Integer.parseInt(dbInfo.getProperty("maxTotal")) ;
+			int maxWait = Integer.parseInt(dbInfo.getProperty("maxWait")) ;
+			
+			dataSource.setInitialSize(initialSize);
+			dataSource.setMaxTotal(maxTotal);
+			dataSource.setMaxWaitMillis(maxWait);
+			dataSource.setMaxIdle(maxIdle);
+			
+			
+			dataSource.setInitialSize(2);
+			dataSource.setMaxTotal(3);
+			dataSource.setMaxWaitMillis(2000);
+			dataSource.setMaxIdle(2);
+			
+			
+			
+		} catch ( IOException e) {
 			throw new RuntimeException(e);			
 		}
 	}
 	
 	public static Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(url, user, password);
+		return dataSource.getConnection();
 	}
 
 }

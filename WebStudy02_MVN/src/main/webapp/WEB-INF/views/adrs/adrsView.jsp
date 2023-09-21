@@ -8,6 +8,12 @@
 <jsp:include page="/includee/preScript.jsp"></jsp:include>
 </head>
 <body data-context-path="<%=request.getContextPath()%>">
+<form id="adrsForm" action="<%=request.getContextPath()%>/adrs/address" method="post">
+	<input type="text" name="adrsName" placeholder="이름" required/> 
+	<input type="text" name="adrsHp" placeholder="휴대폰" required/> 
+	<input type="text" name="adrsAdd" placeholder="주소" /> 
+	<input type="submit" value="등록"/>
+</form>
 	<table>
 		<thead>
 			<tr>

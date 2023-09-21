@@ -10,12 +10,12 @@ import java.util.Map;
 
 import kr.or.ddit.common.exception.PersistenceException;
 import kr.or.ddit.db.ConnectionFactory;
-import kr.or.ddit.vo.MemberVO2;
+import kr.or.ddit.vo.MemberVO;
 
 public class MemberDAOImpl implements MemberDAO {
 
 	@Override
-	public MemberVO2 selectMemberForAuth(MemberVO2 inputData) {
+	public MemberVO selectMemberForAuth(MemberVO inputData) {
 		StringBuffer sql = new StringBuffer();
 		 sql.append("SELECT MEM_ID, MEM_PASS, MEM_NAME, MEM_HP, MEM_MAIL  ");
         sql.append("FROM MEMBER                                          ");
@@ -37,9 +37,9 @@ public class MemberDAOImpl implements MemberDAO {
 	         
 	        ResultSet rs = pstmt.executeQuery(); 
 	        
-			MemberVO2 saved = null;
+			MemberVO saved = null;
 			if (rs.next()) {
-				saved = new MemberVO2();
+				saved = new MemberVO();
 				saved.setMemId(rs.getString("MEM_ID"));
 				saved.setMemPass(rs.getString("MEM_PASS"));
 				saved.setMemName(rs.getString("MEM_NAME"));
