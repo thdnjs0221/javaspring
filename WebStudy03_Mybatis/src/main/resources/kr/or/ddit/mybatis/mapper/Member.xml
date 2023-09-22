@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.member.dao.MemberDAO">
+	<select id="selectMemberForAuth" parameterType="MemberVO" resultType="MemberVO">
+		SELECT MEM_ID, MEM_PASS, MEM_NAME, MEM_HP, MEM_MAIL, MEM_BIR
+        FROM MEMBER                                         
+        WHERE MEM_ID = #{memId} AND MEM_PASS= #{memPass}  
+	</select>
+	<select id="selectMemberList" resultType="MemberVO">
+		SELECT  
+		MEM_NAME,MEM_HP,MEM_MAIL,MEM_BIR,MEM_ADD1,MEM_MILEAGE
+        FROM MEMBER 
+	
+	
+	</select>
+	
+<!-- 	SELECT -->
+<!--     MEM_ID, MEM_NAME, MEM_HP, -->
+<!--     MEM_MAIL, MEM_ADD1, MEM_MILEAGE, -->
+<!--     MEM_BIR -->
+<!--     ,(select count(distinct cart_prod) -->
+<!--         from cart -->
+<!--         where cart_member = mem_id) prod_count -->
+<!-- FROM -->
+<!--     MEMBER -->
+
+
+
+</mapper>
