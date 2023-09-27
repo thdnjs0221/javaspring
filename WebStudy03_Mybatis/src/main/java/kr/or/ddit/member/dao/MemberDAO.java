@@ -2,6 +2,8 @@ package kr.or.ddit.member.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import kr.or.ddit.vo.MemberVO;
 
 /**
@@ -31,7 +33,7 @@ public interface MemberDAO {
 	 * @param memId
 	 * @return 존재하지 않으면, null 반환
 	 */
-	public MemberVO selectMember(String memId);
+	public MemberVO selectMember(@Param("memId") String memId);
 	
 	
 	/**

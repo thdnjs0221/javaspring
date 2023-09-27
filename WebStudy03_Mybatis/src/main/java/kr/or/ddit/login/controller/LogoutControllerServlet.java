@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kr.or.ddit.mvc.ViewResolverComposite;
+
 @WebServlet("/login/logout.do")
 public class LogoutControllerServlet extends HttpServlet {
 
@@ -33,16 +35,9 @@ public class LogoutControllerServlet extends HttpServlet {
 		session.invalidate();  //invalidate를 사용하면 알아서 authid 속성 아이디 지워짐
 		
 		//3.클라이언트에게 보여줌 (welcome page redirection으로) 
-		String goPage ="redirect:/";
+		String viewName ="redirect:/";
 				
-		if(goPage.startsWith("redirect:")) { //Redirect
-			String location = req.getContextPath() + goPage.substring("redirect:".length());
-			resp.sendRedirect(location);
-			
-		}else {//Dispatcher로 이동
-			req.getRequestDispatcher(goPage).forward(req, resp);
-		}
-		
+		new ViewResolverComposite().resolveView(viewName, req, resp);
 		
 		
 	}

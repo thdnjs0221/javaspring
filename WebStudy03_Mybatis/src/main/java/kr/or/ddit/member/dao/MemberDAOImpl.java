@@ -29,16 +29,21 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public int insertMember(MemberVO member) {
-		// TODO Auto-generated method stub
-		return 0;
+		try (
+				SqlSession sqlSession = sqlSessionFactory.openSession(true); // try블럭 벗어나면 자동종료
+			) {
+				
+				MemberDAO mapperProxy = sqlSession.getMapper(MemberDAO.class);
+				return mapperProxy.insertMember(member);
+		}
 	}
-
 	@Override
 	public MemberVO selectMember(String memId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+		try (SqlSession sqlSession = sqlSessionFactory.openSession(); // try블럭 벗어나면 자동종료
+				) {
+					return sqlSession.selectOne("kr.or.ddit.member.dao.MemberDAO.selectMember", memId);
+				}
+			}
 	// @@
 	@Override
 	public List<MemberVO> selectMemberList() {
@@ -53,16 +58,29 @@ public class MemberDAOImpl implements MemberDAO {
 		}
 	}
 
+	//수정
 	@Override
 	public int updateMember(MemberVO member) {
-		// TODO Auto-generated method stub
-		return 0;
+		try (
+				SqlSession sqlSession = sqlSessionFactory.openSession(true); // try블럭 벗어나면 자동종료
+			) {
+				
+				MemberDAO mapperProxy = sqlSession.getMapper(MemberDAO.class);
+				return mapperProxy.updateMember(member);
+
+			}
 	}
 
 	@Override
 	public int deleteMember(String memId) {
-		// TODO Auto-generated method stub
-		return 0;
+		try (
+				SqlSession sqlSession = sqlSessionFactory.openSession(true); // try블럭 벗어나면 자동종료
+			) {
+				
+				MemberDAO mapperProxy = sqlSession.getMapper(MemberDAO.class);
+				return mapperProxy.deleteMember(memId);
+
+			}
 	}
 
 }

@@ -2,12 +2,25 @@ package kr.or.ddit.member.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import kr.or.ddit.vo.MemberVO;
 
 class MemberDAOImplTest {
 	MemberDAO dao = new MemberDAOImpl();
+	
+	@Test
+	void testSelectMember() {
+		MemberVO member = dao.selectMember("a001");
+		assertNotNull(member);
+		member.getProdSet()
+		.forEach((pv)->{			
+			System.out.println(pv.getProdName()+", "+pv.getLprod().getLprodNm());
+		});
+	}
+	
 
 	@Test
 	void testSelectMemberForAuth() {
@@ -17,5 +30,13 @@ class MemberDAOImplTest {
 		MemberVO saved = dao.selectMemberForAuth(inputData);
 		assertNotNull(saved);
 	}
-
+	
+	@Test
+	   void testSelectMemberList() {
+	      List<MemberVO> memList =  dao.selectMemberList();
+	      assertNotNull(memList);
+	      assertNotEquals(0, memList);
+	   }
+	   
+	
 }

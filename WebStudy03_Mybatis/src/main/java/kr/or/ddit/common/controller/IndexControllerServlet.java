@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.or.ddit.mvc.ViewResolverComposite;
+
 @WebServlet("/index.do")
 public class IndexControllerServlet extends HttpServlet {
 
@@ -17,7 +19,7 @@ public class IndexControllerServlet extends HttpServlet {
 		
 		req.setAttribute("title", title);
 		
-		String viewName="/WEB-INF/views/index.jsp";
-		req.getRequestDispatcher(viewName).forward(req, resp);  //Dispatcher 서버에서만 사용하는..
+		String viewName="index";
+		new ViewResolverComposite().resolveView(viewName, req, resp);
 	}
 }

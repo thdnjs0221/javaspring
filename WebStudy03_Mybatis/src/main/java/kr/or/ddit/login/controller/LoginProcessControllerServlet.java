@@ -13,9 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
+import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.login.service.AthenticateServiceImpl;
 import kr.or.ddit.login.service.AuthenticateService;
-
+import kr.or.ddit.mvc.ViewResolverComposite;
 import kr.or.ddit.vo.MemberVO;
 
 @WebServlet("/Login/loginProcess.do")
@@ -47,46 +48,41 @@ public class LoginProcessControllerServlet extends HttpServlet {
       boolean valid = validate(inputdata);
       
       Cookie idCookie = null;
-      HttpSession session = req.getSession();
+   
       
       int sc = 200;
-      String goPage = null;
+      String viewName = null;
       if(valid) {
 //      4-1. 검증 통과
 //         5-1. 인증 여부 판단
-         boolean authenticated = service.authenticate(inputdata);
-         if(authenticated) {
-            
-            // 체크박스 체크여부 확인
-            if(idSave==null || idSave.isEmpty()) {
-               // 체크가 안되어있으면...
-               Cookie[] cookies = req.getCookies();
-               // 있던 쿠키 삭제
-               for(Cookie tmp : cookies) {
-                  if(tmp.getName().equals("memId")) {
-                     tmp.setMaxAge(0);
-                     break;
-                  }
-               }
-            }else {
-               //체크가 되어있으면...
-               idCookie = new Cookie("memId",memId);
-               idCookie.setPath(req.getContextPath());
-               idCookie.setMaxAge(60*60*24*7);
-               resp.addCookie(idCookie);
-            }
-//            6-1. 인증 성공
-//               - 웰컴페이지 이동
-            session.setAttribute("authId", memId);
-            //@@
-            goPage = "redirect:/";
-            
-         }else {
-//            6-2. 인증 실패
-//               - loginForm으로 이동
-            goPage = "redirect:/login/loginForm.jsp";
-            session.setAttribute("message", "아이디나 비밀번호 오류");
-         } // if(authenticated) end
+         ServiceResult result = service.authenticate(inputdata);
+         HttpSession session = req.getSession();
+         switch (result) {
+		case OK:
+			//인증 성공
+		    //  6-1. 인증 성공
+//            - 웰컴페이지 이동
+         session.setAttribute("authId", memId);
+         //@@
+         viewName = "redirect:/";
+
+			break;
+		case INVALIDPASSWORD:
+			//
+			// 6-2. 인증 실패
+//           - loginForm으로 이동
+    	 viewName = "redirect:/login/loginForm.jsp";
+        session.setAttribute("message", "비밀번호 오류");
+
+			break;
+
+		default:
+			//그런 사람 없음
+			 viewName = "redirect:/login/loginForm.jsp";
+		        session.setAttribute("message", "가입 안했거니 이미 탈퇴한 회원");
+			break;
+		}
+
          
       }else {   
 //      4-2. 검증 불통과
@@ -96,13 +92,9 @@ public class LoginProcessControllerServlet extends HttpServlet {
       
       if(sc == 200) {
          // goPage로 이동
-         if(goPage.startsWith("redirect:")) {
-            
-            String location = req.getContextPath() + goPage.substring("redirect:".length());
-            resp.sendRedirect(location);
-         }else {
-            req.getRequestDispatcher(goPage).forward(req, resp);
-         }
+  		//뷰이동
+  		
+  		new ViewResolverComposite().resolveView(viewName, req, resp);
       }else {
          resp.sendError(sc);
       }

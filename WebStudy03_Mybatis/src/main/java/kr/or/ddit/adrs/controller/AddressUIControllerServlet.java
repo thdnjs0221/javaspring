@@ -8,20 +8,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.or.ddit.mvc.ViewResolverComposite;
+
 @WebServlet("/adrs/view")
 public class AddressUIControllerServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String goPage = "/WEB-INF/views/adrs/adrsView.jsp";
+		String viewName = "adrs/adrsView";
 
 		// goPage로 이동
-		if (goPage.startsWith("redirect:")) {
-
-			String location = req.getContextPath() + goPage.substring("redirect:".length());
-			resp.sendRedirect(location);
-		} else {
-			req.getRequestDispatcher(goPage).forward(req, resp);
-		}
+		new ViewResolverComposite().resolveView(viewName, req, resp);
+		
 
 	}
 

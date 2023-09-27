@@ -1,5 +1,6 @@
 package kr.or.ddit.login.service;
 
+import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.vo.MemberVO;
 
 
@@ -8,6 +9,13 @@ import kr.or.ddit.vo.MemberVO;
  *
  */
 public interface AuthenticateService {
-	public boolean authenticate(MemberVO inputData);
+	
+	
+	
+	/** 사용자 인증
+	 * @param inputData
+	 * @return NOTEXIST, INVALIDPASSWORD ,OK
+	 */
+	public ServiceResult authenticate(MemberVO inputData);
 
 }

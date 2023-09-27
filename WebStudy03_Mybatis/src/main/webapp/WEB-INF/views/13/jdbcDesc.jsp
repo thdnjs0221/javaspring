@@ -1,15 +1,15 @@
 <%@page import="kr.or.ddit.vo.DataBasePropertyVO"%>
-<%@page import="kr.or.ddit.db.ConnectionFactory"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
+<%@page import="java.sql .Statement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,32 +35,32 @@
    6. 결과 집합 핸들링(select..)
    7. close(***) - try with resource 구문 활용
 </pre>
-<%
-/*
-   //model1구조
+
+<!-- /* -->
+<!--    //model1구조 -->
    
-   List<Map<String, Object>> list = new ArrayList<>();         
+<!--    List<Map<String, Object>> list = new ArrayList<>();          -->
    
-   try(      
-      Connection conn = ConnectionFactory.getConnection();
-      Statement stmt =  conn.createStatement(); //4. 쿼리객체 생성
-   ){
-      StringBuffer sql = new StringBuffer();
-      sql.append(" select property_name, property_value, description");
-      sql.append(" from database_properties                         ");
-      ResultSet rs = stmt.executeQuery(sql.toString());//5.쿼리실행
+<!--    try(       -->
+<!--       Connection conn = ConnectionFactory.getConnection(); -->
+<!--       Statement stmt =  conn.createStatement(); //4. 쿼리객체 생성 -->
+<!--    ){ -->
+<!--       StringBuffer sql = new StringBuffer(); -->
+<!--       sql.append(" select property_name, property_value, description"); -->
+<!--       sql.append(" from database_properties                         "); -->
+<!--       ResultSet rs = stmt.executeQuery(sql.toString());//5.쿼리실행 -->
       
-      while(rs.next()){
-         Map<String, Object> record = new HashMap<>();
-         list.add(record);
-         record.put("propertyName", rs.getString("PROPERTY_NAME"));
-         record.put("propertyValue", rs.getString("PROPERTY_VALUE"));
-         record.put("description", rs.getString("DESCRIPTION"));
-      }
-   }
-*/
-   List<DataBasePropertyVO> list = (List<DataBasePropertyVO>) request.getAttribute("list");
-%>
+<!--       while(rs.next()){ -->
+<!--          Map<String, Object> record = new HashMap<>(); -->
+<!--          list.add(record); -->
+<!--          record.put("propertyName", rs.getString("PROPERTY_NAME")); -->
+<!--          record.put("propertyValue", rs.getString("PROPERTY_VALUE")); -->
+<!--          record.put("description", rs.getString("DESCRIPTION")); -->
+<!--       } -->
+<!--    } -->
+<!-- */ -->
+
+
 <table>
    <thead>
       <tr>
@@ -70,25 +70,30 @@
       </tr>
    </thead>
    <tbody>
-      <%
-      if(list.isEmpty()){
-      %>
-         <tr>
-            <td colspan="3">조회 결과 없음.</td>
-         </tr>
-      <%
-      }else{
-         for(DataBasePropertyVO record : list){
-            %>
-            <tr>
-               <td><%=record.getPropertyName() %></td>
-               <td><%=record.getPropertyValue() %></td>
-               <td><%=record.getDescription() %></td>
+   
+   <c:choose>
+   		<c:when test="${empty requestScope.list }">
+   			<tr>
+            	<td colspan="3">조회 결과 없음.</td>
+         	</tr>
+   		</c:when>
+   		
+   		<c:otherwise>
+   			<c:forEach items="${requestScope.list }" var="record">
+   			 <tr>
+               <td>${record.propertyName}</td>
+               <td>${record.propertyValue}</td>
+               <td>${record.description}</td>
             </tr>
-            <%
-         }
-      }
-   %>
+   			</c:forEach>
+   		
+   		
+   		</c:otherwise>
+   
+   
+   
+   </c:choose>
+ 
    </tbody>
 </table>
 

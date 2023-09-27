@@ -5,53 +5,71 @@ import java.util.List;
 import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.login.service.AthenticateServiceImpl;
 import kr.or.ddit.login.service.AuthenticateService;
-
+import kr.or.ddit.member.UserNotFoundException;
 import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
 import kr.or.ddit.vo.MemberVO;
 
-public class MemberServiceImpl implements MemberService{
-   
-   private MemberDAO dao = new MemberDAOImpl();
-   private AuthenticateService authService = new AthenticateServiceImpl();
+public class MemberServiceImpl implements MemberService {
 
- 
-   @Override
-   public ServiceResult CreateMember(MemberVO member) {
-   	// TODO Auto-generated method stub
-   	return null;
-   }
+	private MemberDAO dao = new MemberDAOImpl();
+	private AuthenticateService authService = new AthenticateServiceImpl();
 
-   @Override
-   public MemberVO retrieveMember(String memId) {
-      // TODO Auto-generated method stub
-      return null;
-   }
+	@Override
+	public ServiceResult CreateMember(MemberVO member) {
+		ServiceResult result = null;
+		// db에서 아이디 조회 (중복)
+		if (dao.selectMember(member.getMemId()) == null) {
+			// 가입 o
+			int rowcnt = dao.insertMember(member);
+			result = rowcnt > 0 ? ServiceResult.OK : ServiceResult.FAIL;
+		} else {
+			// 아이디 중복 pk중복
+			result = ServiceResult.PKDUPLICATED;
 
-   @Override
-   public List<MemberVO> retrieveMemberList() {
+		}
+		return result;
+	}
+
+	@Override
+	public MemberVO retrieveMember(String memId) {
+
+		MemberVO member = dao.selectMember(memId);
+		if (member == null)
+			throw new UserNotFoundException(memId);
+		return member;
+
+	}
+
+	@Override
+	public List<MemberVO> retrieveMemberList() {
 		return dao.selectMemberList();
-   }
+	}
 
-   @Override
-   public ServiceResult modifyMember(MemberVO member) {
-      boolean authenticated = authService.authenticate(member);
-      ServiceResult result = null;
-      if(authenticated) {
-         int rowcnt = dao.updateMember(member);
-         result = rowcnt > 0 ? ServiceResult.OK : ServiceResult.FAIL;
-      }else {
-         result = ServiceResult.INVALIDPASSWORD;
-      }
-      return null;
-   }
+	@Override
+	public ServiceResult modifyMember(MemberVO member) {
+		ServiceResult authenticated = authService.authenticate(member);
+		ServiceResult result = null;
+		if (authenticated==ServiceResult.OK) {
+			int rowcnt = dao.updateMember(member);
+			result = rowcnt > 0 ? ServiceResult.OK : ServiceResult.FAIL;
+		} else {
+			result = ServiceResult.INVALIDPASSWORD;
+		}
+		return result;
+	}
 
-   @Override
-   public ServiceResult removeMember(MemberVO member) {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-
+	// 삭제
+	@Override
+	public ServiceResult removeMember(MemberVO member) {
+		ServiceResult result = authService.authenticate(member);
+		if (result==ServiceResult.OK) {
+			int rowcnt = dao.deleteMember(member.getMemId());
+			result = rowcnt > 0 ? ServiceResult.OK : ServiceResult.FAIL;
+		} else {
+			result = ServiceResult.INVALIDPASSWORD;
+		}
+		return result;
+	}
 
 }

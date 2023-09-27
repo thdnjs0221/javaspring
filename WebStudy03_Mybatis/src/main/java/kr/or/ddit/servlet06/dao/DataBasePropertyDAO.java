@@ -8,13 +8,29 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.or.ddit.db.ConnectionFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import kr.or.ddit.db.CustomSqlSessionFactoryBuilder;
 import kr.or.ddit.vo.DataBasePropertyVO;
 
 //POJO(Plain Old Java Object)
 public class DataBasePropertyDAO {
+	private SqlSessionFactory sqlSessionFactory = CustomSqlSessionFactoryBuilder.getSqlSessionFactory(); // 싱글톤
+	
+	//마이바티스 프레임뭐크는 필요한 객체를 대신 만들고, 어플리케이션 내부로 주입하는 역할을 함  
+	//Ioc(Inversion Of Controller, DI :Dependency Injection) 패턴 활용
+	
    public List<DataBasePropertyVO> selectDBPropertyList(){
-      List<DataBasePropertyVO> list = new ArrayList<>();
+	   
+	   try(SqlSession sqlSession = sqlSessionFactory.openSession();
+			   
+			){
+		   	return sqlSession.selectList("kr.or.ddit.servlet06.dao.DataBasePropertyDAO.selectDBPropertyList");
+	   }
+	   
+   }
+      /*List<DataBasePropertyVO> list = new ArrayList<>();
       try(
          Connection conn = ConnectionFactory.getConnection();
          Statement stmt = conn.createStatement();
@@ -37,5 +53,5 @@ public class DataBasePropertyDAO {
          throw new RuntimeException(e);
          
       }
-   }
+   }*/
 }

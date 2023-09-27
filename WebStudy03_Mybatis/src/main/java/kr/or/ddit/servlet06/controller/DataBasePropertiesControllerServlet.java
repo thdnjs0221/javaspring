@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.ddit.db.ConnectionFactory;
+
 import kr.or.ddit.servlet06.dao.DataBasePropertyDAO;
 import kr.or.ddit.servlet06.service.DataBasePropertyService;
 import kr.or.ddit.servlet06.service.DataBasePropertyServiceImpl;
@@ -34,7 +34,7 @@ public class DataBasePropertiesControllerServlet extends HttpServlet {
 		List<DataBasePropertyVO> list = service.retrieveDBPropertyList();
 		req.setAttribute("list", list);
 		
-		//vi ew 페이지 이동
+		//view 페이지 이동
 		String goPage = "/WEB-INF/views/13/jdbcDesc.jsp";
 		
 		if (goPage.startsWith("redirect:")) { // Redirect
