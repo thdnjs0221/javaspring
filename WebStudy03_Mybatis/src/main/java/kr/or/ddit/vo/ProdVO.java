@@ -1,5 +1,7 @@
 package kr.or.ddit.vo;
 
+import java.util.Set;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 /**
@@ -29,6 +31,9 @@ public class ProdVO {
 	private Integer prodQtysale;
 	private Integer prodMileage;
 	
-	private LprodVO lprod;//has a (1:1관계)
+	//private Set<ProdVO>prodSet;
+	private LprodVO lprod;//has a (1:1관계) 상품하나가 분류하나에 속하기때문에
+	private BuyerVO buyer; // has a
 	
+	private Set<MemberVO>memberSet; //has many
 }

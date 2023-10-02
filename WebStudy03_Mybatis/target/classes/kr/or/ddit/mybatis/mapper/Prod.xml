@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prod.dao.ProdDAO">
+
+  <resultMap type="ProdVO" id="prodMap" autoMapping="true">
+  	<id property="prodId" column="PROD_ID"/>  <!--pk, vo에 equals있는지 확인  -->
+		<association property="lprod" autoMapping="true" />
+		<association property="buyer" autoMapping="true" />
+		<!-- <association property="member" autoMapping="true" /> -->
+		<collection property="memberSet" ofType="MemberVO" autoMapping="true"/>
+	
+	</resultMap>  
+
+<select id="selectProd" parameterType="string" resultMap="prodMap">
+
+    WITH CARTVIEW AS(
+    SELECT DISTINCT CART_PROD, MEM_ID, MEM_NAME, MEM_HP, MEM_MAIL, MEM_ADD1, MEM_MILEAGE
+    FROM CART LEFT OUTER JOIN MEMBER ON(CART_MEMBER=MEM_ID)
+)
+SELECT
+        prod_id,  prod_name, prod_lgu,
+        prod_buyer, prod_cost, prod_price,
+        prod_sale, prod_outline, prod_detail,
+        prod_img, prod_totalstock, prod_insdate,
+        prod_properstock, prod_size,
+        prod_color, prod_delivery,
+        prod_unit, prod_qtyin,
+        prod_qtysale, prod_mileage,
+        LPROD_NM,
+        buyer_id, buyer_name, buyer_lgu, buyer_bank,
+        buyer_add1, buyer_charger,
+        MEM_ID, MEM_NAME, MEM_HP, MEM_MAIL, MEM_ADD1,MEM_MILEAGE
+    FROM
+        PROD LEFT OUTER JOIN BUYER ON(PROD_BUYER=BUYER_ID)
+            LEFT OUTER JOIN LPROD ON(PROD_LGU=LPROD_GU)
+            LEFT OUTER JOIN CARTVIEW ON(PROD_ID=CART_PROD)
+    WHERE
+        prod_id=#{prodId}
+        
+
+
+</select>
+
+
+
+</mapper>
+

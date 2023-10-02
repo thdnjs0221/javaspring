@@ -26,6 +26,23 @@ import lombok.ToString;
 /**
  * 한 사람의 회원 정보를 캡슐화하기 위한 도메인 레이어.
  * 
+ * 
+ * 
+ *  **** Data Mapper를 이용해 다중 엔터티를 조회하는 단계
+ * 1. 주엔터티를 기준으로 엔터티간 관계 파악
+ *  	1:1 ex) 하나의 상품과 그 상품의 제조사 정보 PROD(1) : BUYER(1)
+ *  	1:N ex) 한사람의 구매정보 MEMBER(1) : PROD(N)
+ * 2. 각 엔터테의 조회 결과를 바인딩할 VO에 엔터티간의 관계를 has 관계로 반영
+ * 		1:1 - has a ex) ProdVO has a BuyerVO
+ * 		1:N - has many ex) MemeberVO has many ProVO
+ * 		ex) 하나의 제조사(BUYER)와 그 제조사의 제조 상품(PROD) 목록을 조회.
+ * 			BUYER(1) : PROD(N) -> BuyerVO has many ProdVO
+ * 
+ *		ex) 하나의 제조사(BUYER)와 그 제조사의 분류명(LPROD)을 조회
+ *			BUYER(1) : LPROD(1) -> BuyerVO has a LpordVO
+ * 3. 조회결과 바인딩시, resultType 대신 resultMap을 이용해 수동 바인딩 설정.
+ * 		has many : collection (ofType)
+ * 		has a  : association (javaType)
  *
  */
 @Getter	
@@ -79,10 +96,6 @@ public class MemberVO implements Serializable{
 	private boolean memDelete;
 	private int prodCount;
 	
-	private Set<ProdVO>prodSet;  //set 중복제거 has many관계(1:N 관계)
-	
-	
-	
-	
-
+	//private Set<ProdVO>prodSet;  //set 중복제거 has many관계(1:N 관계)
+	private Set<CartVO>cartSet;    //has many관계(1:N 관계) 구매기록
 }

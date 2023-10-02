@@ -24,9 +24,15 @@
       <put-attribute name="content" value="/WEB-INF/views/member/{1}.jsp"/>
    </definition>
    
+   <definition name="prod/*" extends="abstractDef">
+   	<put-attribute name="content" value="/WEB-INF/views/prod/{1}.jsp"/>
+   </definition>
+   
    <definition name="adrs/adrsView" extends="abstractDef">
    	<put-attribute name="content" value="/WEB-INF/views/adrs/adrsView.jsp"/>
    </definition>
+   
+   
    
 
 </tiles-definitions>
