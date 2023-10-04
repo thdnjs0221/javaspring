@@ -117,6 +117,7 @@
 			<c:when test="${ not empty cartSet }">
 				<c:forEach items="${cartSet }" var="cart">
 					<c:set var="prod" value="${cart.prod }"></c:set>
+					
 					<c:url value="/prod.prodView.do" var="prodViewURL">
 					<c:param name="what" value="${prod.prodId }"/>
 					</c:url>

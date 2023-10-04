@@ -24,6 +24,7 @@ public class CartVO {
 	private LocalDate cartDate; //논리컬럼
 
 	private ProdVO prod; //has a 
+	private MemberVO member; // has a 한건의 분류된 사람 
 	
 
 }

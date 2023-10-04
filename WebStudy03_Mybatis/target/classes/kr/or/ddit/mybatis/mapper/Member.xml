@@ -9,20 +9,52 @@
 		FROM MEMBER
 		WHERE MEM_ID = #{memId} AND MEM_DELETE IS NULL
 	</select>
-
-	<select id="selectMemberList" resultType="MemberVO">
-		SELECT
-		MEM_ID, MEM_NAME, MEM_HP
-		, MEM_MAIL, MEM_ADD1, MEM_MILEAGE
-		, MEM_BIR
-		, (
-		SELECT COUNT(DISTINCT CART_PROD)
-		FROM CART
-		WHERE CART_MEMBER = MEM_ID
-		) PROD_COUNT
-		FROM MEMBER
-
+	<sql id="searchFrag">
+		<where>
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(simpleCondition.serachWord)">
+				<choose>
+					<when test="simpleCondition.serachType eq 'name'">
+						INSTR(MEM_NAME, #{simpleCondition.serachWord}) > 0
+					</when>
+					<when test="simpleCondition.serachType eq 'address'">
+						INSTR(MEM_ADD1, #{simpleCondition.serachWord}) > 0
+					</when>
+					<otherwise>
+						INSTR(MEM_NAME, #{simpleCondition.serachWord}) > 0
+						OR
+						INSTR(MEM_ADD1, #{simpleCondition.serachWord}) > 0
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	
+	</sql>
+	<select id="selectTotalRecord" resultType="int" parameterType="PaginationInfo">
+			SELECT COUNT(*)
+			FROM MEMBER
+			<include refid="searchFrag"/>
 	</select>
+<!--멤버조회 페이징처리  -->
+	<select id="selectMemberList" resultType="MemberVO" parameterType="PaginationInfo">
+	SELECT A.*
+	FROM(
+		SELECT ROWNUM RNUM,
+			MEM_ID, MEM_NAME, MEM_HP
+			, MEM_MAIL, MEM_ADD1, MEM_MILEAGE
+			, MEM_BIR
+			, (
+			SELECT COUNT(DISTINCT CART_PROD)
+			FROM CART
+			WHERE CART_MEMBER = MEM_ID
+			) PROD_COUNT
+		FROM MEMBER
+		<include refid="searchFrag"/>
+	)A
+	<![CDATA[
+	WHERE RNUM >=#{startRow} AND RNUM <=#{endRow}
+	]]>
+	</select>
+	
 	<resultMap type="MemberVO" id="memberMap" autoMapping="true">
 		<id property="memId" column="MEM_ID" />
 		<collection property="cartSet" ofType="CartVO"

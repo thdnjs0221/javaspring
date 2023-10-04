@@ -34,9 +34,7 @@
   					<td>${prod.buyer.buyerBank }</td>
   				</tr>
   			</thead>
-  			<tbody> 
-  			
-  				
+  			<tbody>
   			</tbody>
   		</table>
   		
@@ -45,8 +43,7 @@
   			<thead>
   				<tr>
   					<th>구매자이름</th>
-  					
-  					
+
   					<th>휴대폰</th>
   					
   					<th>이메일</th>
@@ -54,12 +51,14 @@
   					<th>거주지</th>
   					
   					<th>마일리지</th>
+  					<th>구매일자</th>
   					
   				</tr>
   			</thead>
   			<tbody>
-  			<c:set var="memberSet" value="${prod.memberSet }"/>
-  			<c:forEach items="${memberSet }" var="member"> 
+  			<c:set var="cartList" value="${prod.cartList }"/>
+  			<c:forEach items="${cartList }" var="cart"> 
+  			<c:set var="member" value="${cart.member }"/>
   				<tr>				
 					<td>${member.memName}</td>
 					<td>${member.memHp}</td>
@@ -67,6 +66,7 @@
 					<td>${member.memAdd1}</td>
 					<td>${member.memAdd2}</td>
 					<td>${member.memMileage}</td>
+					<td>${cart.cartDate}</td>
 				</tr>
   			
   			</c:forEach>

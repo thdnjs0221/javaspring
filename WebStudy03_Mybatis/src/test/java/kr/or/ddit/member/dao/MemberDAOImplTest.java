@@ -33,7 +33,7 @@ class MemberDAOImplTest {
 	
 	@Test
 	   void testSelectMemberList() {
-	      List<MemberVO> memList =  dao.selectMemberList();
+	      List<MemberVO> memList =  dao.selectMemberList(paging);
 	      assertNotNull(memList);
 	      assertNotEquals(0, memList);
 	   }

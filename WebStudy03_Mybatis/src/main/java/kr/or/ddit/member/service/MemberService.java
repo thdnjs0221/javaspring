@@ -5,6 +5,7 @@ import java.util.List;
 import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.member.UserNotFoundException;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.PaginationInfo;
 
 //Enum으로 관리
 /**
@@ -29,9 +30,10 @@ public interface MemberService {
 	
 	/**
 	 * 관리자 용도로 사용될 회원 목록 조회
+	 * @param paging TODO
 	 * @return
 	 */
-	public List<MemberVO> retrieveMemberList();
+	public List<MemberVO> retrieveMemberList(PaginationInfo paging);
 	
 	/**
 	 * 마이페이지에서부터 자기 정보를 수정할때 사용

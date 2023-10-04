@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.PaginationInfo;
 
 /**
  * 사용자 인증정보와 회원정보를 관리하기 위한 Persistence Layer
@@ -35,12 +36,20 @@ public interface MemberDAO {
 	 */
 	public MemberVO selectMember(@Param("memId") String memId);
 	
+	/**
+	 * totalRecord 조회
+	 * @param paging TODO
+	 * @return
+	 */
+	public int selectTotalRecord(PaginationInfo<MemberVO> paging);
+	
 	
 	/**
 	 * 회원 목록 조회 (추후, 검색과 페이징 지원 예약)
+	 * @param paging TODO
 	 * @return
 	 */
-	public List<MemberVO> selectMemberList();
+	public List<MemberVO> selectMemberList(PaginationInfo paging);
 	
 	
 	/**

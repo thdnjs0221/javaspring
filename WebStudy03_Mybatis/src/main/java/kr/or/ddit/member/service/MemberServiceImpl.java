@@ -9,6 +9,7 @@ import kr.or.ddit.member.UserNotFoundException;
 import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.PaginationInfo;
 
 public class MemberServiceImpl implements MemberService {
 
@@ -42,8 +43,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> retrieveMemberList() {
-		return dao.selectMemberList();
+	public List<MemberVO> retrieveMemberList(PaginationInfo paging) {
+		int totalRecord = dao.selectTotalRecord(paging);
+		paging.setTotalRecord(totalRecord);
+		List<MemberVO> dataList =dao.selectMemberList(paging);
+		paging.setDataList(dataList);
+		return dataList;
 	}
 
 	@Override

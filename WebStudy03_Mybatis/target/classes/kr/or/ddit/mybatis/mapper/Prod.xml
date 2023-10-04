@@ -2,44 +2,91 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.prod.dao.ProdDAO">
 
-  <resultMap type="ProdVO" id="prodMap" autoMapping="true">
-  	<id property="prodId" column="PROD_ID"/>  <!--pk, vo에 equals있는지 확인  -->
+	<resultMap type="ProdVO" id="prodMap" autoMapping="true">
+		<id property="prodId" column="PROD_ID" />  <!--pk, vo에 equals있는지 확인 -->
 		<association property="lprod" autoMapping="true" />
 		<association property="buyer" autoMapping="true" />
 		<!-- <association property="member" autoMapping="true" /> -->
-		<collection property="memberSet" ofType="MemberVO" autoMapping="true"/>
-	
-	</resultMap>  
-
-<select id="selectProd" parameterType="string" resultMap="prodMap">
-
-    WITH CARTVIEW AS(
-    SELECT DISTINCT CART_PROD, MEM_ID, MEM_NAME, MEM_HP, MEM_MAIL, MEM_ADD1, MEM_MILEAGE
-    FROM CART LEFT OUTER JOIN MEMBER ON(CART_MEMBER=MEM_ID)
-)
-SELECT
-        prod_id,  prod_name, prod_lgu,
-        prod_buyer, prod_cost, prod_price,
-        prod_sale, prod_outline, prod_detail,
-        prod_img, prod_totalstock, prod_insdate,
-        prod_properstock, prod_size,
-        prod_color, prod_delivery,
-        prod_unit, prod_qtyin,
-        prod_qtysale, prod_mileage,
-        LPROD_NM,
-        buyer_id, buyer_name, buyer_lgu, buyer_bank,
-        buyer_add1, buyer_charger,
-        MEM_ID, MEM_NAME, MEM_HP, MEM_MAIL, MEM_ADD1,MEM_MILEAGE
-    FROM
-        PROD LEFT OUTER JOIN BUYER ON(PROD_BUYER=BUYER_ID)
-            LEFT OUTER JOIN LPROD ON(PROD_LGU=LPROD_GU)
-            LEFT OUTER JOIN CARTVIEW ON(PROD_ID=CART_PROD)
-    WHERE
-        prod_id=#{prodId}
-        
+		<collection property="cartList" ofType="CartVO"
+			autoMapping="true">
+			<association property="member" autoMapping="true" />
+		</collection>
 
 
-</select>
+	</resultMap>
+	<select id="selectTotalRecord" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		PROD
+	</select>
+
+	<select id="selectProdList" resultType="ProdVO"
+		parameterType="PaginationInfo">
+		SELECT A.*
+		FROM(
+			SELECT ROWNUM RNUM, PROD_NAME,BUYER_NAME "buyer.buyerName", LPROD_NM "lprod.lprodNM", PROD_BUYER , PROD_PRICE,
+			PROD_SALE, PROD_MILEAGE
+		,(
+			SELECT COUNT (DISTINCT CART_MEMBER)
+			FROM CART
+			WHERE CART_PROD = PROD_ID
+			) PROD_COUNT
+		FROM PROD
+			INNER JOIN LPROD
+			ON LPROD_GU = PROD_LGU
+			INNER JOIN BUYER
+			ON BUYER_ID = PROD_BUYER
+		)A  
+	<![CDATA[
+	WHERE RNUM >=#{startRow} AND RNUM <=#{endRow}
+	]]>
+
+
+	</select>
+
+
+
+
+	<select id="selectProd" parameterType="string"
+		resultMap="prodMap">
+
+		WITH MEMBERVIEW AS(
+		SELECT MEMBER.*, CART.*
+		FROM CART LEFT
+		OUTER JOIN MEMBER ON(CART_MEMBER=MEM_ID)
+		)
+		SELECT
+		PROD_ID, PROD_NAME,
+		PROD_LGU,
+		PROD_BUYER, PROD_COST, PROD_PRICE,
+		PROD_SALE, PROD_OUTLINE,
+		PROD_DETAIL,
+		PROD_IMG, PROD_TOTALSTOCK, PROD_INSDATE,
+		PROD_PROPERSTOCK,
+		PROD_SIZE,
+		PROD_COLOR, PROD_DELIVERY,
+		PROD_UNIT, PROD_QTYIN,
+		PROD_QTYSALE, PROD_MILEAGE,
+		LPROD_NM,
+		BUYER_ID, BUYER_NAME, BUYER_LGU,
+		BUYER_BANK,
+		BUYER_ADD1, BUYER_CHARGER,
+		CART_NO, CART_QTY,
+		TO_DATE(SUBSTR(CART_NO, 1, 8), 'YYYYMMDD') CART_DATE,
+		MEM_ID, MEM_NAME,
+		MEM_HP,
+		MEM_MAIL, MEM_ADD1,MEM_MILEAGE
+		FROM
+		PROD LEFT OUTER JOIN BUYER
+		ON(PROD_BUYER=BUYER_ID)
+		LEFT OUTER JOIN LPROD ON(PROD_LGU=LPROD_GU)
+		LEFT OUTER JOIN MEMBERVIEW ON(PROD_ID=CART_PROD)
+		WHERE
+		PROD_ID=#{prodId}
+
+
+
+	</select>
 
 
 

@@ -15,6 +15,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import kr.or.ddit.adrs.dao.AddressDAO;
 import kr.or.ddit.db.CustomSqlSessionFactoryBuilder;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.PaginationInfo;
 
 public class MemberDAOImpl implements MemberDAO {
 	private SqlSessionFactory sqlSessionFactory = CustomSqlSessionFactoryBuilder.getSqlSessionFactory(); // 싱글톤
@@ -46,14 +47,14 @@ public class MemberDAOImpl implements MemberDAO {
 			}
 	// @@
 	@Override
-	public List<MemberVO> selectMemberList() {
+	public List<MemberVO> selectMemberList(PaginationInfo paging) {
 
 		try (
 			SqlSession sqlSession = sqlSessionFactory.openSession(); // try블럭 벗어나면 자동종료
 		) {
 			
 			MemberDAO mapperProxy = sqlSession.getMapper(MemberDAO.class);
-			return mapperProxy.selectMemberList();
+			return mapperProxy.selectMemberList(paging);
 
 		}
 	}
@@ -79,6 +80,18 @@ public class MemberDAOImpl implements MemberDAO {
 				
 				MemberDAO mapperProxy = sqlSession.getMapper(MemberDAO.class);
 				return mapperProxy.deleteMember(memId);
+
+			}
+	}
+
+	@Override
+	public int selectTotalRecord(PaginationInfo<MemberVO> paging) {
+		try (
+				SqlSession sqlSession = sqlSessionFactory.openSession(); // try블럭 벗어나면 자동종료
+			) {
+				
+				MemberDAO mapperProxy = sqlSession.getMapper(MemberDAO.class);
+				return mapperProxy.selectTotalRecord(paging);
 
 			}
 	}
