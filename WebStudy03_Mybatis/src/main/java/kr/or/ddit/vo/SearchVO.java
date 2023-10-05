@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SearchVO {
 
-	private String serachType;
-	private String serachWord;
+	//키워드 조건
+	private String searchType;
+	private String searchWord;
 }

@@ -15,7 +15,7 @@ import kr.or.ddit.prod.service.ProdService;
 import kr.or.ddit.prod.service.ProdServiceImpl;
 import kr.or.ddit.vo.ProdVO;
 
-@WebServlet("/prod.prodView.do")
+@WebServlet("/prod/prodView.do")
 public class ProdViewControllerServlet extends HttpServlet {
 	private ProdService service = new ProdServiceImpl();
 

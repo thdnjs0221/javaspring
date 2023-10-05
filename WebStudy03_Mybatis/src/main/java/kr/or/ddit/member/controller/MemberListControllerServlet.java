@@ -38,7 +38,7 @@ public class MemberListControllerServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		
-		//검증의 대상이 아님
+		//검증의 대상이 아님 / searchForm에서 온 3개의 파라미터 
 		String searchType = req.getParameter("searchType");
 		String searchWord = req.getParameter("searchWord");
 		SearchVO simpleCondition = new SearchVO(searchType, searchWord);  //SearchVO하나로 모아주기
@@ -52,9 +52,10 @@ public class MemberListControllerServlet extends HttpServlet{
 			currentPage = Integer.parseInt(pageParam);
 		}
 		
-		PaginationInfo<MemberVO> paging = new PaginationInfo<>(5,2);
+		PaginationInfo<MemberVO> paging = new PaginationInfo<>(5,2);  //PaginationInfo<MemberVO>니까  detailCondition MemberVO 
 		paging.setSimpleCondition(simpleCondition);  //키워드 검색 조건
 		paging.setCurrentPage(currentPage);
+		//검색 조건, 페이징 완성
 		//paging.setRenderer(new BootstrapPaginationRender());
 		
 		service.retrieveMemberList(paging);

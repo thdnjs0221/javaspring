@@ -2,6 +2,7 @@ package kr.or.ddit.prod.service;
 
 import java.util.List;
 
+import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.vo.PaginationInfo;
 import kr.or.ddit.vo.ProdVO;
 
@@ -24,4 +25,15 @@ public interface ProdService {
 	 *  @param currentPage를 비록한 프로퍼티를 가진{@link PaginationInfo }
 	 */
 	public void retrieveProdList(PaginationInfo<ProdVO>paging);
+	
+	
+	
+	/**
+	 * 상품코드를 생성하고 신규상품을 등록함
+	 * @param prod
+	 * @return OK, FAIL
+	 * 
+	 * pk중복 필요없음 입력을 안받기 때문에
+	 */
+	public ServiceResult createProd(ProdVO prod);
 }

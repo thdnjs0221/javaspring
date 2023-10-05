@@ -27,11 +27,11 @@ public class PaginationInfo<T> {
 		this.blockSize = blockSize;
 	}
 
-	private int totalRecord;  //select 쿼리 필요
-	private int currentPage;  //request prameter로 확보
+	private int totalRecord;  //select 쿼리 필요(db)
+	private int currentPage;  //request parameter로 확보(client)
 	
 	private int screenSize = 10; //개발자 임의 결정 필요하다면 변경 가능해야함
-	private int blockSize = 5;
+	private int blockSize = 5;	 //개발자 임의 결정 필요하다면 변경 가능해야함
 	
 	
 	//연산식 필요
@@ -44,10 +44,18 @@ public class PaginationInfo<T> {
 	
 	private List<T> dataList;
 	
-	private SearchVO simpleCondition;
+	private SearchVO simpleCondition; //단순 키워드 검색 조건
+	
+	private T detailCondition; //상세 검색 조건(T 회원이나 상품이나 다 사용 가능)
 	
 	private PagingnationRenderer renderer = new DefaultPaginationRender();
 	
+	
+	public void setDetailCondition(T detailCondition) {
+		this.detailCondition = detailCondition;
+	}
+	
+	//11번째 프로퍼티
 	public void setSimpleCondition(SearchVO simpleCondition) {
 		this.simpleCondition = simpleCondition;
 	}
@@ -66,7 +74,7 @@ public class PaginationInfo<T> {
 		totalPage = (totalRecord + (screenSize - 1)) / screenSize;
 	}
 	
-	public void setCurrentPage(int currentPage) {
+	public void setCurrentPage(int currentPage) { //setCurrentPage를 주어준 순간 5개 정해짐(개발자 임의로 정하는 2개 제외)
 		this.currentPage = currentPage;
 		
 		endRow = currentPage *screenSize;

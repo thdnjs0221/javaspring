@@ -45,9 +45,9 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MemberVO> retrieveMemberList(PaginationInfo paging) {
 		int totalRecord = dao.selectTotalRecord(paging);
-		paging.setTotalRecord(totalRecord);
+		paging.setTotalRecord(totalRecord); //페이지를 결정하는 
 		List<MemberVO> dataList =dao.selectMemberList(paging);
-		paging.setDataList(dataList);
+		paging.setDataList(dataList); //페이지를 결정하는 
 		return dataList;
 	}
 

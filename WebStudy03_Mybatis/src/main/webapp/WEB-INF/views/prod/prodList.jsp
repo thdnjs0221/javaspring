@@ -25,7 +25,7 @@
 			<c:forEach items="${pordList }" var="prod">
 				<tr>
 					<td>${prod.rnum }</td>
-					<td>${prod.prodName }</a></td>
+					<td><a href="">${prod.prodName }</a></td>
 					<td>${prod.lprod.lprodNm }</td>
 					<td>${prod.buyer.buyerName }</td>
 					<td>${prod.prodPrice }</td>
@@ -41,16 +41,75 @@
 		<tr>
 			<td colspan="7">
 				${paging.pagingHTML }
+				<div id="searchUI">
+				
+					<select name="prodLgu">
+						<option value>상품분류</option>
+						<c:if test="${not empty lprodList}">
+						<c:forEach items="${lprodList }" var="lprod">
+						<option label="${lprod.lprodNm }" value="${lprod.lprodGu  }"/>
+						</c:forEach>
+						</c:if>
+								
+					</select>
+					<select name="prodBuyer">
+						<option value>제조사</option>
+						<c:if test="${not empty buyerList}">
+						<c:forEach items="${buyerList }" var="buyer">
+						<option class="${buyer.buyerLgu }" label="${buyer.buyerName }" value="${buyer.buyerId  }"/>
+						</c:forEach>
+						</c:if>								
+					</select>
+					
+					<input type="text" name="prodName" placeholder="상품명"/> 
+					<input type="button" value="검색" id="searchBtn"/> 
+				</div>
 			</td>
 		</tr>
 	</tfoot>
 </table>
+<!--전송하는 hidden폼 페이지랑 검색 동시에! -->
+<form id="searchForm">
+	<input type="text" name="prodLgu" readonly="readonly" placeholder="prodLgu"/>
+	<input type="text" name="prodBuyer" readonly="readonly" placeholder="prodBuyer"/>
+	<input type="text" name="prodName" readonly="readonly" placeholder="prodName"/>
+	<input type="text" name="page" readonly="readonly" placeholder="page"/>
+</form>
 <script type="text/javascript">
+
+$("select[name=prodLgu]").on("change",function(event){
+	let lgu = $(this).val();
+	let options = $("select[name=prodBuyer]").find("option");
+	$(options).hide();
+	$(options).filter((i,e)=>i==0).show();
+	if(lgu){
+		$(options).filter(`.\${lgu}`).show();
+	}else{
+		$(options).show();
+	}	
+});
+
+$(":input[name=prodLgu]").val("${paging.detailCondition.prodLgu}").trigger("change");
+$(":input[name=prodBuyer]").val("${paging.detailCondition.prodBuyer}");
+$(":input[name=prodName]").val("${paging.detailCondition.prodName}");
+
+//페이징도 같이 서버로 보내기(서버+검색조건)
 function fn_paging(page){
-	location.href="?page="+page;
-	
-	
-	
+	searchForm.page.value = page;
+	searchForm.requestSubmit();
+
 }
+
+//검색
+$(searchUI).on("click","#searchBtn",function(event){    //this->searchBtn버튼
+	let inputs = $(this).parents("#searchUI").find(":input[name]");  //name속성들이 있는것만 가져옴?
+	$.each(inputs, function(idx,ipt){
+		let name = ipt.name;
+		let value = $(ipt).val();  //
+		$(searchForm).find(`:input[name=\${name}]`).val(value);
+		$(searchForm).submit();
+		
+	});//$.each
+});
 
 </script>
