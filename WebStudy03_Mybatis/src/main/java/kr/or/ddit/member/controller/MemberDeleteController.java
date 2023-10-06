@@ -1,6 +1,7 @@
 package kr.or.ddit.member.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +33,13 @@ public class MemberDeleteController extends HttpServlet {
 //		req.getUserPrincipal();
 		
 		HttpSession session = req.getSession();
+		
+		Principal principal =  req.getUserPrincipal();
+		
+		
 		//누가 탈퇴? 아이디, 비밀번호
-		String memId = (String)session.getAttribute("authId");
-		req.setCharacterEncoding("utf-8");
+		String memId = principal.getName(); //userid 존재
+
 		
 		
 		

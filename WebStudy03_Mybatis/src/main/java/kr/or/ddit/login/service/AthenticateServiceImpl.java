@@ -1,5 +1,9 @@
 package kr.or.ddit.login.service;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.commons.beanutils.BeanUtils;
+
 import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
@@ -19,7 +23,16 @@ public class AthenticateServiceImpl implements AuthenticateService {
 		String inputPass = inputData.getMemPass();
 		String savedPass = saved.getMemPass();
 		if(savedPass.equals(inputPass)) {
-			result = ServiceResult.OK;
+			try {
+				BeanUtils.copyProperties(inputData, saved);
+				result = ServiceResult.OK;
+				
+			} catch (IllegalAccessException | InvocationTargetException e) {
+				//membervo 잘못만들어짐(로그인 불가)
+				throw new RuntimeException(e);
+			}
+			
+			
 		}else {
 			result = ServiceResult.INVALIDPASSWORD;
 		}

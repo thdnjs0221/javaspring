@@ -4,23 +4,33 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.or.ddit.filter.wrapper.DummyHttpServletRequestWrapper;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
 import kr.or.ddit.mvc.ViewResolverComposite;
 import kr.or.ddit.vo.MemberVO;
+import lombok.extern.slf4j.Slf4j;
 
 @WebServlet("/member/memberView.do")
+@Slf4j
 public class MemberViewControllerServlet extends HttpServlet {
 	private MemberService service = new MemberServiceImpl();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		req.setCharacterEncoding("utf-8");
+		//원본요청인지 확인
+		if(req instanceof DummyHttpServletRequestWrapper) {
+			String data =((DummyHttpServletRequestWrapper) req).getSpecificData();
+			log.info("reqeust specific data:{}",data);
+			Cookie sessionCookie = ((DummyHttpServletRequestWrapper) req).getCookie("JSESSIONID");
+			log.info("session id: {} ,{}",sessionCookie.getValue(),req.getSession().getId());
+		}
 		
 		String memId =req.getParameter("who");
 		

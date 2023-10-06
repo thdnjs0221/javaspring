@@ -2,6 +2,7 @@ package kr.or.ddit.member.controller;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
@@ -32,21 +33,22 @@ import kr.or.ddit.validate.grouphint.UpdateGroup;
 import kr.or.ddit.vo.MemberVO;
 
 @WebServlet("/member/memberUpdate.do")
-public class MemberUpdateControllerServlet extends HttpServlet{
+public class MemberUpdateControllerServlet extends HttpServlet {
 	private MemberService service = new MemberServiceImpl();
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String memId = (String) req.getSession().getAttribute("authId");
-		
+		Principal principal = req.getUserPrincipal();
+
+		String memId = principal.getName(); // userid 존재
+
 		MemberVO member = service.retrieveMember(memId);
-		
+
 		req.setAttribute("member", member);
-		
+
 		String viewName = "member/memberInsert";
 		new ViewResolverComposite().resolveView(viewName, req, resp);
 	}
-
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -60,13 +62,13 @@ public class MemberUpdateControllerServlet extends HttpServlet{
 //		member.setMemId(memId);
 
 		PopulateUtils.populate(member, parameterMap);
-		
+
 		Map<String, List<String>> errors = new HashMap<>();
 		req.setAttribute("errors", errors);
 //		3. 검증 (대상 : MemberVO)
 		boolean valid = ValidationUtils.validate(member, errors, UpdateGroup.class);
 		String viewName = null;
-		if(valid) {
+		if (valid) {
 //			통과
 //				4. modifyMember 수정 처리
 			ServiceResult result = service.modifyMember(member);
@@ -76,7 +78,7 @@ public class MemberUpdateControllerServlet extends HttpServlet{
 //						memberForm 으로 이동 (기존 입력 데이터, 메시지, dispatch)
 				req.setAttribute("message", "비밀번호 오류");
 				viewName = "member/memberInsert";
-				
+
 				break;
 			case OK:
 //					2) OK 
@@ -90,7 +92,7 @@ public class MemberUpdateControllerServlet extends HttpServlet{
 				viewName = "member/memberInsert";
 				break;
 			}
-		}else {
+		} else {
 //			불통
 //				memberForm 으로 이동 (기존 입력 데이터, 검증 결과 메시지들.., dispatch)
 			viewName = "member/memberInsert";
@@ -99,7 +101,4 @@ public class MemberUpdateControllerServlet extends HttpServlet{
 		new ViewResolverComposite().resolveView(viewName, req, resp);
 	}
 
-
 }
-
-

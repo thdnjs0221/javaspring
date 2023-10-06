@@ -28,7 +28,7 @@ public class ProdListControllerServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
+	
 		
 		// searchForm에서 온 4개의 파라미터 
 		req.getParameter("prodLgu");

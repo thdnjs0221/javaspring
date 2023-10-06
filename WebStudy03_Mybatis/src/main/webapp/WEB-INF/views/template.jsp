@@ -37,7 +37,7 @@
 		<!-- Custom styles for this template -->
 		<link href="<%=request.getContextPath()%>/resources/css/dashboard.css" rel="stylesheet">
 	</head>
-	<body class="d-flex flex-column vh-100">
+	<body class="d-flex flex-column vh-100" data-context-path="${pageContext.request.contextPath }">
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 			<tiles:insertAttribute name="headerMenu"/>
 		</header>

@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form method="post">
+	<form method="post" enctype="multipart/form-data">
 		<table class="table table-border">
 
 				<tr>
@@ -62,8 +62,11 @@
 					<td><input type="text" name="prodDetail"></td>
 				</tr>
 				<tr>
-					<th>이미지</th>
-					<td><input type="text" name="prodImg"></td>
+					<th><label for="prodImage">이미지</label></th>
+					<td>
+						<input type="file" name="prodImage" id="prodImage" class="form-controller" required/>
+						<span class="error">${errors.prodImg} </span>
+					</td>
 				</tr>
 				<tr>
 					<th>총재고</th>

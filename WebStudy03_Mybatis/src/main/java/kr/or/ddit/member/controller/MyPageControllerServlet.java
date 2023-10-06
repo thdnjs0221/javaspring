@@ -1,6 +1,7 @@
 package kr.or.ddit.member.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,22 +15,24 @@ import kr.or.ddit.mvc.ViewResolverComposite;
 import kr.or.ddit.vo.MemberVO;
 
 @WebServlet("/mypage")
-public class MyPageControllerServlet extends HttpServlet{
-	 private MemberService service = new MemberServiceImpl();
+public class MyPageControllerServlet extends HttpServlet {
+	private MemberService service = new MemberServiceImpl();
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		String memId = (String)req.getSession().getAttribute("authId");
-		
+
+		Principal principal = req.getUserPrincipal();
+
+		String memId = principal.getName(); // userid 존재
+
 		MemberVO member = service.retrieveMember(memId);
-		
+
 		req.setAttribute("member", member);
-		
-		//String goPage = "/WEB-INF/views/member/MyPage.jsp";
+
+		// String goPage = "/WEB-INF/views/member/MyPage.jsp";
 		String viewName = "member/myPage";
 		new ViewResolverComposite().resolveView(viewName, req, resp);
-		
-		
+
 	}
 
 }

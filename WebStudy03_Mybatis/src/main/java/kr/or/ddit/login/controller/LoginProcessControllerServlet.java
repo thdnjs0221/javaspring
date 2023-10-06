@@ -40,12 +40,12 @@ public class LoginProcessControllerServlet extends HttpServlet {
       String memPass = req.getParameter("memPass");
       String idSave = req.getParameter("idSave");
       
-      MemberVO inputdata = new MemberVO();
-      inputdata.setMemId(memId);
-      inputdata.setMemPass(memPass);
+      MemberVO inputData = new MemberVO();
+      inputData.setMemId(memId);
+      inputData.setMemPass(memPass);
       
 //      3. 요청 검증
-      boolean valid = validate(inputdata);
+      boolean valid = validate(inputData);
       
       Cookie idCookie = null;
    
@@ -55,16 +55,16 @@ public class LoginProcessControllerServlet extends HttpServlet {
       if(valid) {
 //      4-1. 검증 통과
 //         5-1. 인증 여부 판단
-         ServiceResult result = service.authenticate(inputdata);
+         ServiceResult result = service.authenticate(inputData);
          HttpSession session = req.getSession();
          switch (result) {
 		case OK:
 			//인증 성공
 		    //  6-1. 인증 성공
 //            - 웰컴페이지 이동
-         session.setAttribute("authId", memId);
-         //@@
-         viewName = "redirect:/";
+		 viewName = "redirect:/";
+         session.setAttribute("authMember", inputData);
+       
 
 			break;
 		case INVALIDPASSWORD:

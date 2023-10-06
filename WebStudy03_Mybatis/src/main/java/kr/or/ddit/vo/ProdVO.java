@@ -34,7 +34,10 @@ public class ProdVO {
 	private Integer prodSale;
 	private String prodOutline;
 	private String prodDetail;
-	private String prodImg;
+
+	@NotBlank
+	private String prodImg;	//데이터베이스와 주고 받는 용도로
+	
 	@NotNull
 	@Min(0)
 	private Integer prodTotalstock;

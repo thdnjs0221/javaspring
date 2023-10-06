@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<a href="<c:url value='/prod/prodInsert.do'/>" > 신규상품 등록</a>
 <table class="table table-border">
 	<thead>
 		<tr>
@@ -23,9 +25,12 @@
 		</c:if>
 		<c:if test="${not empty pordList}">
 			<c:forEach items="${pordList }" var="prod">
+				<c:url value="/prod/prodView.do" var="prodViewURL">
+					<c:param name="what" value="${prod.prodId }"/>
+				</c:url>
 				<tr>
 					<td>${prod.rnum }</td>
-					<td><a href="">${prod.prodName }</a></td>
+					<td><a href="${prodViewURL}/prod/prodView.do">${prod.prodName }</a></td>
 					<td>${prod.lprod.lprodNm }</td>
 					<td>${prod.buyer.buyerName }</td>
 					<td>${prod.prodPrice }</td>

@@ -2,6 +2,7 @@ package kr.or.ddit.adrs.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,10 @@ public class AddressDataControllerServlet extends HttpServlet {
 
       req.setCharacterEncoding("Utf-8");
 
-      String memId = (String) req.getSession().getAttribute("authId");
+      Principal principal =  req.getUserPrincipal();
+	
+	 String memId = principal.getName(); //userid 존재
+
       
       List<AddressVO> adrsList = service.retriveAddressList(memId);
 
