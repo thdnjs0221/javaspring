@@ -34,6 +34,8 @@ public class ProdViewControllerServlet extends HttpServlet {
 
 		ProdVO prod = service.retrieveProd(prodId);
 		req.setAttribute("prod", prod);
+		
+		
 
 		// 뷰이동
 		String viewName = "prod/prodView";

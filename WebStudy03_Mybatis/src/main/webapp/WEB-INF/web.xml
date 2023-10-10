@@ -23,21 +23,20 @@
 	</filter-mapping>
 	
 	<filter>
-		<filter-name>MultipartFilter</filter-name>
-		<filter-class>kr.or.ddit.filter.utils.MultipartFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>MultipartFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	
-	
-	<filter>
 		<filter-name>GeneratePricipalFilter</filter-name>
 		<filter-class>kr.or.ddit.filter.GeneratePricipalFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>GeneratePricipalFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>MultipartFilter</filter-name>
+		<filter-class>kr.or.ddit.filter.utils.MultipartFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>MultipartFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	

@@ -25,10 +25,14 @@ import kr.or.ddit.vo.SearchVO;
 public class ProdListControllerServlet extends HttpServlet {
 	private ProdService service = new ProdServiceImpl();
 	private OthersDAO othersdao = new OthersDAOImpl();
+	private void addRequestAttribute(HttpServletRequest req) {
+		req.setAttribute("lprodList", othersdao.selectLprodList());
+		req.setAttribute("buyerList", othersdao.selectBuyerList(null));
+	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	
+		addRequestAttribute(req);
 		
 		// searchForm에서 온 4개의 파라미터 
 		req.getParameter("prodLgu");
@@ -59,8 +63,7 @@ public class ProdListControllerServlet extends HttpServlet {
 		
 		req.setAttribute("paging", paging);
 		
-		req.setAttribute("lprodList", othersdao.selectLprodList());
-		req.setAttribute("buyerList", othersdao.selectBuyerList(null));
+		
 		
 		//뷰이동
 		String viewName = "prod/prodList";

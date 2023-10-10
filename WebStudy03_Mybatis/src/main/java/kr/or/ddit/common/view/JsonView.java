@@ -16,10 +16,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-@WebServlet("/jsonView.view")
-public class JsonViewServlet extends HttpServlet{
+import kr.or.ddit.mvc.View;
+
+//외부에서 오는 요청(request) 못받음
+public class JsonView implements View{
 	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
+	public void render (HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		String contentType = "application/json; charset=utf-8"; //response의 content
 		resp.setContentType(contentType);
 		
