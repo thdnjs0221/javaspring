@@ -16,7 +16,5 @@ public interface ViewResolver {
 	public default void setSuffix(String suffix) {}
 	
 	public void resolveView(String viewName, HttpServletRequest req, HttpServletResponse resp)
-		throws ServletException, IOException
-		
-		;
+		throws ServletException, IOException;
 }

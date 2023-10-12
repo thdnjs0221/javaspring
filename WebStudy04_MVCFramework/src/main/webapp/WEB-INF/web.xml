@@ -7,8 +7,8 @@
 	<welcome-file-list>
 		<welcome-file>index.do</welcome-file>
 	</welcome-file-list>
+	
 	<!--쓰는 순서가 필터 순서임 -->
-
 	<filter>
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<filter-class>kr.or.ddit.filter.CharacterEncodingFilter</filter-class>
@@ -58,13 +58,24 @@
 	<servlet>
 		<servlet-name>DispatcherServlet</servlet-name>
 		<servlet-class>kr.or.ddit.mvc.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>prefix</param-name>
+			<param-value>/WEB-INF/views/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>suffix</param-name>
+			<param-value>.jsp</param-value>
+		</init-param>
 		<load-on-startup>1</load-on-startup>
 		<multipart-config></multipart-config>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DispatcherServlet</servlet-name>
 		<url-pattern>*.do</url-pattern>
+		<url-pattern>/index.do</url-pattern>
+		<url-pattern>/mypage</url-pattern>
 	</servlet-mapping>
+	
 
 
 </web-app>

@@ -16,7 +16,7 @@ import kr.or.ddit.file.utils.StandardMultipartFile;
 
 /**
  * multipart request 를 wrapping 할 adapter. Part를 MultipartFile 의 구현체로 변환
- * 
+ *  어댑터
  */
 public class StandardMultipartHttpServletRequest extends HttpServletRequestWrapper {
 	private Map<String, List<MultipartFile>> fileMap;

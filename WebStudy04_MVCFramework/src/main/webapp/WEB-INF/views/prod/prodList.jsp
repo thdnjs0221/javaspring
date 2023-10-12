@@ -94,9 +94,9 @@ $("select[name=prodLgu]").on("change",function(event){
 	}	
 });
 
-$(":input[name=prodLgu]").val("${paging.detailCondition.prodLgu}").trigger("change");
-$(":input[name=prodBuyer]").val("${paging.detailCondition.prodBuyer}");
-$(":input[name=prodName]").val("${paging.detailCondition.prodName}");
+$(":input[name=prodLgu]").val("${detailCondition.prodLgu}").trigger("change");
+$(":input[name=prodBuyer]").val("${detailCondition.prodBuyer}");
+$(":input[name=prodName]").val("${detailCondition.prodName}");
 
 //페이징도 같이 서버로 보내기(서버+검색조건)
 function fn_paging(page){

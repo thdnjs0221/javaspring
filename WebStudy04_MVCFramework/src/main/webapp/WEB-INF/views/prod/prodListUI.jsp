@@ -33,7 +33,8 @@
 							</c:forEach>
 						</c:if>
 
-					</select> <select name="prodBuyer">
+					</select>
+					<select name="prodBuyer">
 						<option value>제조사</option>
 						<c:if test="${not empty buyerList}">
 							<c:forEach items="${buyerList }" var="buyer">

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+<!-- 어노테이션을 사용할 수 있는 post processor를 빈으로 등록함. -->
+<context:annotation-config/>
+<!-- base-package에 있는 클래스들 중, -->
+<!-- 몇가지 조건에 맞는 클래스를 빈으로 등록. -->
+<context:component-scan base-package="kr.or.ddit.case1" use-default-filters="true">
+</context:component-scan>
+<!-- 컨테이너 계층 구조가 필요할때 false  -->
+
+<!-- 자동 등록되는 어노테이션들 -->
+<!-- @Component -->
+<!-- @Respository -->
+<!-- @Service -->
+<!-- @Controller -->
+
+<!-- @AutoWired : type으로 주입 대상 검색 -->
+<!-- @Resource : 주입 대상 검색 조건 설정 가능(내가 마음대로 가능) -->
+<!-- @Inject( == AutoWired) / @Named (==@Resource(name..)) 이게 제일 쉬움..! -->
+
+</beans>

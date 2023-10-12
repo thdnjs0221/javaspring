@@ -83,8 +83,8 @@
 
 <script>
 
-	$(":input[name=searchType]").val("${paging.simpleCondition.searchType}");
-	$(":input[name=searchWord]").val("${paging.simpleCondition.searchWord}");
+	$(":input[name=searchType]").val("${simpleCondition.searchType}");
+	$(":input[name=searchWord]").val("${simpleCondition.searchWord}");
 	//페이징도 같이 서버로 보내기(서버+검색조건)
 	function fn_paging(page){
 		searchForm.page.value = page;

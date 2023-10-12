@@ -199,7 +199,7 @@
 		,PROD_MILEAGE = #{prodMileage, jdbcType=NUMERIC}
 
 	<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(prodImg)">
-		,PROD_IMAG = #{ProdImg,jdbcType=BLOB}
+		,PROD_IMG = #{prodImg,jdbcType=BLOB}
 	</if>
 	WHERE  PROD_ID=#{prodId, jdbcType=VARCHAR}
 	</update>
