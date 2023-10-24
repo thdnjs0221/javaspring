@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,8 +16,7 @@ public class LoginProcessControllerServlet extends HttpServlet {
 		boolean valid = true;
 		valid &= memId != null && !memId.trim().isEmpty();  
 		valid &= memPass != null && !memPass.trim().isEmpty();//&= 다 통과해야지 true	
-		return valid;
-		
+		return valid;	
 	}
 	private boolean authenticated(String memId, String memPass) {
 		return memId.equals(memPass);  //로그인성공
@@ -41,13 +41,20 @@ public class LoginProcessControllerServlet extends HttpServlet {
 //				4-1 검증 통과
 //				5-1 인증 여부 판단
 			boolean authenticated=authenticated(memId, memPass);
-			HttpSession session= req.getSession();  //session 은 클라이언트
+			HttpSession session= req.getSession();  //session 은 클라이언트 최초요청할때 생김
 			
 			if(authenticated) {
 //				6-1 인증 성공
 //				   -웰컴페이지로 이동
 				goPage ="redirect:/"; //redirect는 req.setAttribute() 사용할수 없음! session사용하기
 				session.setAttribute("authId", memId);
+				
+				//@쿠키 생성
+				Cookie loginCookie = new Cookie("authId",memId);
+				loginCookie.setMaxAge(60*60*24*7);
+				loginCookie.setPath(req.getContextPath());
+				resp.addCookie(loginCookie);
+				
 			}else {
 //				6-2 인증 실패
 //		 			- 로그인 폼으로 이동
@@ -55,12 +62,16 @@ public class LoginProcessControllerServlet extends HttpServlet {
 				session.setAttribute("message", "아이디나 비밀번호 오류");
 			}//if(authenticated) end
 			
+			
 		}else {
 //				4-2 검증 불통과
 //					5-2 Bad request 전송
 			sc =HttpServletResponse.SC_BAD_REQUEST;
 		}//if(valid) end
 			
+			
+			
+		//이동하는 코드는 마지막에	!!!
 		if(sc==200) {
 			// goPage(view)로 이동
 			if(goPage.startsWith("redirect:")) { //Redirect

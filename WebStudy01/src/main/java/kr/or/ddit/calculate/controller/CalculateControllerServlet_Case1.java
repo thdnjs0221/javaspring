@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/calculate/case1")
 public class CalculateControllerServlet_Case1 extends HttpServlet{
-	
+	//case 1: 순수한 파라미터로 처리 (설계 x)
 	/**
 	 *UI제공
 	 */
@@ -48,7 +48,7 @@ public class CalculateControllerServlet_Case1 extends HttpServlet{
 			errors.put("rightOp", "우측 피연산자 오류");
 			
 		}
-		if(opParam==null || opParam.trim().isEmpty() || !opParam.matches("PLUS|MINUS|MULTIPLY|DIVIDE")) {
+		if(opParam==null || opParam.trim().isEmpty() || !opParam.matches("PLUS|MINUS|MULTIPLY|DIVIDE|MODULAR")) {
 			//4개의 연산자 외에 다른 연산자가 들어갔는지 판단
 			valid &= false;
 			errors.put("operator", "우측 피연산자 오류");
@@ -81,7 +81,7 @@ public class CalculateControllerServlet_Case1 extends HttpServlet{
 			int rightOp = Integer.parseInt(rightParam);
 			int result = -1;
 			String expression = null;
-			char sign = '/';  //기호
+			char sign = '/';  //default 나눗셈 기호
 			
 			switch (opParam) {
 			case "PLUS":
@@ -97,6 +97,10 @@ public class CalculateControllerServlet_Case1 extends HttpServlet{
 				result = leftOp * rightOp;	
 				sign = '*';
 				break;
+			case "MODULAR":
+				result = leftOp % rightOp;	
+				sign = '%';
+				break;
 				
 			default:
 				result = leftOp / rightOp;		
@@ -105,7 +109,7 @@ public class CalculateControllerServlet_Case1 extends HttpServlet{
 			
 			expression = String.format("%d %c %d = %d",leftOp, sign ,rightOp, result);
 			req.setAttribute("expression", expression); 
-			goPage = "/WEB-INF/views/calculate/case1/calculateView.jsp";
+			goPage = "/WEB-INF/views/calculate/case1/calculateView.jsp"; //동기
 			
 		}else {
 			//검증 불통과 calForm 으로 이동		

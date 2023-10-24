@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.buyer.dao.BuyerDAO">
+<!-- 거래 물품이 존재하지 않은 경우가 있을수도 있으니까 
+	association property="lprod" javaType="LprodVO" autoMapping 쓰면 안된다?
+	has a 관계시 association는 쓰지 않고.. 가능 LPROD_NM "lprod.lprodNm" 이런식으로 사용 가능 오토맵핑을 했기때문에 
+ -->
+
+
+	<resultMap type="BuyerVO" id="buyerMap" autoMapping="true">
+		<id property="buyerId" column="BUYER_ID" />
+		<association property="lprod" javaType="LprodVO">
+			<result property="lprodNm" column="LPROD_NM" />
+		</association>
+		<collection property="prodList" ofType="ProdVO" autoMapping="true" />
+	</resultMap>
+	<select id="selectBuyer" parameterType="string"
+		resultMap="buyerMap">
+		SELECT
+			BUYER_ID, BUYER_NAME, BUYER_LGU , BUYER_BANK, BUYER_BANKNO,
+			BUYER_BANKNAME ,
+			BUYER_ZIP, BUYER_ADD1, BUYER_ADD2 , BUYER_COMTEL,
+			BUYER_FAX, BUYER_MAIL,
+			BUYER_CHARGER, BUYER_TELEXT , BUYER_IMG, LPROD_NM,
+			PROD_ID, PROD_NAME,
+			PROD_COST , PROD_PRICE, PROD_MILEAGE
+		FROM BUYER
+			INNER JOIN LPROD ON (BUYER_LGU = LPROD_GU) LEFT OUTER JOIN PROD ON
+			(BUYER_ID = PROD_BUYER) 
+		WHERE BUYER_ID = #{buyerId} 
+		</select>
+		
+	<sql id="fromFrag">
+		FROM 	buyer 
+		inner join lprod
+		on (buyer_lgu=lprod_gu)
+	</sql>
+		
+		
+			<sql id="searchFrag">  <!--여러 SQL 문에서 공통적으로 사용되는 SQL 코드 조각을 추상화 (검색) -->
+		<trim prefix="WHERE" prefixOverrides="AND">
+
+			<if test=" @org.apache.commons.lang3.StringUtils@isNotBlank(detailCondition.buyerLgu)">
+				AND BUYER_LGU=#{detailCondition.buyerLgu}
+			</if>
+			<if test=" @org.apache.commons.lang3.StringUtils@isNotBlank(detailCondition.buyerName)">
+				AND BUYER_NAME=#{detailCondition.buyerName}
+			</if>
+		</trim>
+	</sql>
+		
+		<select id="selectTotalRecord" resultType="int">
+			SELECT COUNT(*)
+			
+			<include refid="searchFrag" />
+			<include refid="fromFrag" />
+		
+		</select>
+		
+		
+		
+		<select id="selectBuyerList" resultType="BuyerVO" parameterType="PaginationInfo">
+	SELECT A.*
+	FROM(
+	SELECT ROWNUM RNUM,  BUYER_NAME, BUYER_LGU,BUYER_ADD1, BUYER_COMTEL,BUYER_MAIL, LPROD_NM
+	<include refid="fromFrag" />
+	)A
+	<![CDATA[
+	WHERE RNUM >=#{startRow} AND RNUM <=#{endRow}
+	]]>
+		
+		</select>
+		
+		
+		
+		<insert id="insertBuyer" parameterType="BuyerVO">
+			<selectKey order="BEFORE" resultType="string" keyProperty="buyerId">
+				WITH ORDEREDBUYER AS (
+		    SELECT ROWNUM RNUM, A.*
+		    FROM (
+		        SELECT BUYER_ID, BUYER_NAME, BUYER_LGU
+		        , BUYER_ADD1,  BUYER_COMTEL, BUYER_MAIL
+		        , BUYER_CHARGER
+		        , LPROD_NM "lprod.lprodNm"
+		     	<include refid="fromFrag" />   
+		     	<include refid="searchFrag" />
+		        ORDER BY BUYER_LGU ASC, BUYER_ID DESC
+		    ) A
+		)
+		SELECT *
+		FROM ORDEREDBUYER
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+			
+			</selectKey>
+		
+		INSERT INTO buyer (
+			BUYER_ID,
+			BUYER_NAME,
+			BUYER_LGU,
+			BUYER_BANK,
+			BUYER_BANKNO,
+			BUYER_BANKNAME,
+			BUYER_ZIP,
+			BUYER_ADD1,
+			BUYER_ADD2,
+			BUYER_COMTEL,
+			BUYER_FAX,
+			BUYER_MAIL,
+			BUYER_CHARGER,
+			BUYER_TELEXT,
+			BUYER_IMG
+		) VALUES (
+		#{buyerId, jdbcType=VARCHAR}
+		,#{buyerName, jdbcType=VARCHAR}
+		,#{buyerLgu, jdbcType=CHAR}
+		,#{buyerBank, jdbcType=VARCHAR}
+		,#{buyerBankno, jdbcType=VARCHAR}
+		,#{buyerBankname, jdbcType=VARCHAR}
+		,#{buyerZip, jdbcType=CHAR}
+		,#{buyerAdd1, jdbcType=VARCHAR}
+		,#{buyerAdd2,jdbcType=VARCHAR}
+		,#{buyerComtel, jdbcType=VARCHAR}
+		,#{buyerFax, jdbcType=VARCHAR}
+		,#{buyerMail, jdbcType=VARCHAR}
+		,#{buyerCharger, jdbcType=VARCHAR}
+		,#{buyerTelext, jdbcType=VARCHAR}
+		,#{buyerImg, jdbcType=VARCHAR}
+
+		)
+
+		</insert>
+		
+		<update id="updateBuyer" parameterType="BuyerVO">
+		UPDATE BUYER
+		SET
+			BUYER_BANK = #{buyerBank,jdbcType=VARCHAR}
+			, BUYER_BANKNO = #{buyerBankno,jdbcType=VARCHAR}
+			, BUYER_BANKNAME = #{buyerBankname,jdbcType=VARCHAR}
+			, BUYER_ZIP = #{buyerZip,jdbcType=CHAR}
+			, BUYER_ADD1 = #{buyerAdd1,jdbcType=VARCHAR}
+			, BUYER_ADD2 = #{buyerAdd2,jdbcType=VARCHAR}
+			, BUYER_COMTEL = #{buyerComtel,jdbcType=VARCHAR}
+			, BUYER_FAX = #{buyerFax,jdbcType=VARCHAR}
+			, BUYER_MAIL = #{buyerMail,jdbcType=VARCHAR}
+			, BUYER_CHARGER = #{buyerCharger,jdbcType=VARCHAR}
+			, BUYER_TELEXT = #{buyerTelext,jdbcType=VARCHAR}
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(buyerImg)">
+			, BUYER_IMG = #{buyerImg,jdbcType=VARCHAR}
+			</if>
+		WHERE BUYER_ID = #{buyerId}
+	</update>
+	
+	
+	
+</mapper>

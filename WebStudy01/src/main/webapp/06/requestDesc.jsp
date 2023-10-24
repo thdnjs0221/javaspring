@@ -66,8 +66,10 @@
    			<input type="text" name="param3" value="value3"/> 
    			<input type="text" name="param3" value="value3-1"/>  			
    			<input type="text" name="param4" value="value4"/> 
+   			<input type="date" name="date1" />
+   			<input type="datetime-local" name="date2" />
    			<input type="submit" value="전송"/>
-   			<!--body가 없음 get, method="post"으로 써주기-->
+   			<!--body가 없음 get  / method="post"으로 써주기-->
    		</form>
    </div>
    <table>
@@ -82,15 +84,12 @@
        		//파라미터를 확보하기 전에 미리 설정(POST 요청의 request body에 적용됨).
        		//request.setCharacterEncoding("utf-8");
        		String ptrn = "<tr class='%3$s'><td>%1$s</td><td>%2$s</td></tr>";
-            //%1$s String.format의 첫번째 파라미터에 해당하는 값
-
-            //파라미터가 이름-값이기 때문에 맵을 사용하는것이 효과적! String[]이유는 하나의 이름으로 여러값을 전송할수있기 때문
+       	
        		Map<String,String[]> paramMap= request.getParameterMap();
        		if(paramMap.isEmpty()){
        			out.println("<tr><td colspan='2'>파라미터 없음 </td></tr>");
        		}else{
-
-                //Entry: Map 순회할때!!
+       			
        			for(Entry<String,String[]> entry:paramMap.entrySet()){
        				String paramName=entry.getKey();
        				String[] paramValues=entry.getValue();
@@ -117,7 +116,7 @@
       <tbody>
          <%
          
-             //Enumeration : 주로 컬렉션(자료구조) 순회하거나 요소를 열거할때 사용
+            
             Enumeration<String> headerNames = request.getHeaderNames();
 
             while(headerNames.hasMoreElements()){

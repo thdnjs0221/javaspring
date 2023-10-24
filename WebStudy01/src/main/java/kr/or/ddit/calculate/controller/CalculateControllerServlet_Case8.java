@@ -116,6 +116,8 @@ public class CalculateControllerServlet_Case8 extends HttpServlet{
 		req.setCharacterEncoding("utf-8");
 		
 		String requestContentType= req.getContentType();
+		String accept = req.getHeader("accept");  //내가 보내는 편지
+		 
 	
 		//역직렬화 -> 언마셜링(ObjectMapper로 해주기 마셜링도ObjectMapper로 가능 )
 		
@@ -126,14 +128,12 @@ public class CalculateControllerServlet_Case8 extends HttpServlet{
 
 			if(requestContentType.contains("json")) {
 				calVO =getCalculatorVOFromJson(req);
-			}else if(requestContentType.contains("xml")) {
+			}else if(requestContentType.contains("xml")) { //클라이언트가 보내는 xml
 				sc = HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE;
 			}else {
 				calVO = getCalculatorVOFromParameters(req);
 			}
-			
-			
-			
+				
 		}catch (Exception e) {
 			//검증불통과 
 			sc = 400;
@@ -147,7 +147,18 @@ public class CalculateControllerServlet_Case8 extends HttpServlet{
 	
 		req.setAttribute("calVO", calVO);
 		
-		String goPage = "/jsonView.view";
+		//응답 json or html - 요청헤더에 따라서 
+		String goPage = null;
+		if(accept.contains("json")) {
+			goPage = "/jsonView.view";
+		}else if(accept.contains("xml")) { //내가 쓸수 없는 xml
+			resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+			return;
+			
+		}else {
+			goPage="/WEB-INF/views/calculate/case8/calculateView.jsp";
+		}
+		
 	
 		//모든 컨트롤러의 마지막은  페이지 이동
 		

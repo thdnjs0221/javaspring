@@ -41,6 +41,7 @@ public class ProdListController {
 	
 	
 
+	//동기처리
 	//HttpServletRequest req 사용금지 Model
 	@RequestMapping( value = "/prod/prodList.do", method = RequestMethod.GET)
 	public String prodList(@ModelAttribute("detailCondition") ProdVO detailCondition
@@ -59,14 +60,15 @@ public class ProdListController {
 //		if (StringUtils.isNumeric(pageParam)) {
 //			currentPage = Integer.parseInt(pageParam);
 //		}
-
+		//data
 		listData(detailCondition, currentPage, model);
 
-		// 뷰이동
+		// ui이동
 		return "prod/prodList";
 
 	}
 
+	//UI 처리
 	@RequestMapping("/prod/ajax/prodListUI.do")
 	public String listUI() {
 	
@@ -75,6 +77,7 @@ public class ProdListController {
 
 	}
 
+	//data처리
 	@RequestMapping("/prod/ajax/prodListData.do")
 	public String listData(
 			@ModelAttribute("detailCondition") ProdVO detailCondition 

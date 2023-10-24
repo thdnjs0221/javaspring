@@ -1,9 +1,12 @@
 package kr.or.ddit.vo;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.validate.grouphint.InsertGroup;
 import kr.or.ddit.validate.grouphint.UpdateGroup;
@@ -26,7 +30,7 @@ public class ProdVO implements Serializable {
 	
 	@NotBlank(groups = UpdateGroup.class) //문자열대상으로
 	private String prodId;
-	@NotBlank(groups = InsertGroup.class)
+	@NotBlank()
 	private String prodName;
 	@NotBlank(groups = InsertGroup.class)
 	private String prodLgu;
@@ -42,8 +46,20 @@ public class ProdVO implements Serializable {
 
 	@NotBlank(groups = InsertGroup.class)
 	private String prodImg;	//데이터베이스와 주고 받는 용도로
+	private MultipartFile prodImage;  //클라이언트와 대화할때 쓰는
 	
-	//private byte[] prodImage;
+	//@data 주석으로 하고 setter 만들어주기 만든 후 주석 풀기
+	public void setProdImage(MultipartFile prodImage) {
+		if(prodImage!=null && !prodImage.isEmpty()) {
+			this.prodImage = prodImage;			
+			prodImg = UUID.randomUUID().toString();
+		}
+	}
+	
+	public void saveTo(File saveFolder) throws IllegalStateException, IOException {
+		if(prodImage!=null)
+		prodImage.transferTo(new File (saveFolder, prodImg));
+	}
 	
 	@NotNull
 	@Min(0)

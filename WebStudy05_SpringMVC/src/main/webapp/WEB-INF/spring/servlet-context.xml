@@ -11,34 +11,68 @@
 
 	<!--핸들러 어댑터, view resolver .. 등 기본값으로 등록 -->
 
-	<mvc:annotation-driven></mvc:annotation-driven>
+	<mvc:annotation-driven validator="validator"></mvc:annotation-driven>
 
-	<!-- single jsp /  p:order="" 생략하면 제일 마지막 순서 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
+		p:validationMessageSource-ref="messageSource" />
+
+
+	<!-- single jsp / p:order="" 생략하면 제일 마지막 순서 -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/WEB-INF/views/" 
-		p:suffix=".jsp"
-		 
+		p:prefix="/WEB-INF/views/" p:suffix=".jsp" />
+	<!--json 마샬링 -->
+	<bean id="jsonView"
+		class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+	<!--뷰네임만들어주는 -->
+	<bean
+		class="org.springframework.web.servlet.view.BeanNameViewResolver"
+		p:order="1" />
+
+	<bean
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"
+		p:definitions="/WEB-INF/tiles/*-tiles.xml" 
+		p:preparerFactoryClass="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"
 		
-	/>
-	<!--json 마샬링  -->
-	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
-	
-	<!--뷰네임만들어주는  -->
-	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" 
-		 p:order="1" 
-	/>
-	
-	<bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer" 
-		p:definitions="/WEB-INF/tiles/*-tiles.xml"
-	/>
-	<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" 
-		p:order="2"
-	/>
-	
-	<context:component-scan base-package="kr.or.ddit" use-default-filters="false">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-	
+		
+		/>
+	<bean
+		class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"
+		p:order="2" />
+
+	<context:component-scan
+		base-package="kr.or.ddit" use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="kr.or.ddit.common.stereotype.Preparer"/>
+
 	</context:component-scan>
+
+	<!-- 정적자원 처리 방법 (H.M) -->
+	<!-- 1. WAS의 DefaultServlet에게 정적 자원 요청을 위임. 2번 방법을 쓰는걸 권장함 -->
+	<!-- <mvc:default-servlet-handler/> -->
+	<!-- 2.SimpleUrlHandlerMapping 을 추가하고 , /resources/** 패턴으로 정적 자원에 대한 일괄처리 
+		지원 -->
+	<mvc:resources location="/resources/"
+		mapping="/resources/**" cache-period="0" />
+
+	<mvc:interceptors>	
+			<bean
+				class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
+				p:paramName="lang" />
+		<mvc:interceptor>
+		<mvc:mapping path="/mypage/"/>
+		<mvc:mapping path="/member/**"/>
+		<mvc:exclude-mapping path="/member/memberInsert.do"/>
+			<bean
+				class="kr.or.ddit.interceptors.AuthenticationCheckInterceptor"
+				c:loginPage="/login/loginForm.jsp" 
+				
+				/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
 
 </beans>

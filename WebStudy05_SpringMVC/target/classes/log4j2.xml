@@ -14,9 +14,14 @@
       <Logger name="kr.or.ddit" level="info" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
+     <Logger name="org.springframework.web" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    
       <Logger name="org.springframework" level="info" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
+    
       <Logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="trace" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>

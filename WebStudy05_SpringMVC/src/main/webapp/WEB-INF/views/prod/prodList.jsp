@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <a href="<c:url value='/prod/prodInsert.do'/>" > 신규상품 등록</a>
 <table class="table table-border">
@@ -42,44 +43,47 @@
 			</c:forEach>
 		</c:if>
 	</tbody>
-	<tfoot>
-		<tr>
-			<td colspan="7">
-				${paging.pagingHTML }
-				<div id="searchUI">
-				
-					<select name="prodLgu">
-						<option value>상품분류</option>
-						<c:if test="${not empty lprodList}">
-						<c:forEach items="${lprodList }" var="lprod">
-						<option label="${lprod.lprodNm }" value="${lprod.lprodGu  }"/>
-						</c:forEach>
-						</c:if>
-								
-					</select>
-					<select name="prodBuyer">
-						<option value>제조사</option>
-						<c:if test="${not empty buyerList}">
-						<c:forEach items="${buyerList }" var="buyer">
-						<option class="${buyer.buyerLgu }" label="${buyer.buyerName }" value="${buyer.buyerId  }"/>
-						</c:forEach>
-						</c:if>								
-					</select>
-					
-					<input type="text" name="prodName" placeholder="상품명"/> 
-					<input type="button" value="검색" id="searchBtn"/> 
-				</div>
-			</td>
-		</tr>
-	</tfoot>
+	   <tfoot>
+      <tr>
+         <td colspan="8">
+            ${paging.pagingHTML }
+            <div id="searchUI"  class="row g-3 d-flex justify-content-center">
+               <div class="col-auto">
+                  <form:select path="detailCondition.prodLgu" id="prodLgu" class="form-select">
+                     <option value>상품분류</option>
+                     <c:forEach items="${lprodList }" var="lprod">
+                        <form:option label="${lprod.lprodNm }" value="${lprod.lprodGu }" />
+                     </c:forEach>
+                  </form:select>
+               </div>
+               <div class="col-auto">
+                  <form:select path="detailCondition.prodBuyer" class="form-select">
+                  <option value>제조사</option>
+                     <c:forEach items="${buyerList }" var="buyer">
+                        <form:option class="${buyer.buyerLgu}" value="${buyer.buyerId }" label="${buyer.buyerName }" />
+                     </c:forEach>
+                  </form:select>
+               </div>
+               <div class="col-auto">
+                  <input type="text" name="prodName" placeholder="상품명" class="form-control"/>
+               </div>
+               <div class="col-auto">
+                  <input type="button" value="검색" id="searchBtn" class="btn btn-primary"/>
+                  <a href="<c:url value='/prod/prodInsert.do'/>" class="btn btn-success">신규상품 등록</a>
+               </div>
+            </div>
+         </td>
+      </tr>
+   </tfoot>
 </table>
+
 <!--전송하는 hidden폼 페이지랑 검색 동시에! -->
-<form id="searchForm">
-	<input type="text" name="prodLgu" readonly="readonly" placeholder="prodLgu"/>
-	<input type="text" name="prodBuyer" readonly="readonly" placeholder="prodBuyer"/>
-	<input type="text" name="prodName" readonly="readonly" placeholder="prodName"/>
+<form:form modelAttribute="detailCondition" id="searchForm" method="get">
+	<form:input path="prodLgu" readonly="readonly" placeholder="prodLgu"/>
+	<form:input path="prodBuyer" readonly="readonly" placeholder="prodLgu"/>
+	<form:input path="prodName" readonly="readonly" placeholder="prodLgu"/>
 	<input type="text" name="page" readonly="readonly" placeholder="page"/>
-</form>
+</form:form>
 <script type="text/javascript">
 
 $("select[name=prodLgu]").on("change",function(event){
@@ -92,11 +96,13 @@ $("select[name=prodLgu]").on("change",function(event){
 	}else{
 		$(options).show();
 	}	
-});
+}).trigger("change");
 
-$(":input[name=prodLgu]").val("${detailCondition.prodLgu}").trigger("change");
-$(":input[name=prodBuyer]").val("${detailCondition.prodBuyer}");
-$(":input[name=prodName]").val("${detailCondition.prodName}");
+
+//입력 ui 초기값 바인딩
+// $(":input[name=prodLgu]").val("${detailCondition.prodLgu}").trigger("change");
+// $(":input[name=prodBuyer]").val("${detailCondition.prodBuyer}");
+// $(":input[name=prodName]").val("${detailCondition.prodName}");
 
 //페이징도 같이 서버로 보내기(서버+검색조건)
 function fn_paging(page){

@@ -1,20 +1,54 @@
 package kr.or.ddit.member.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
 
 import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.login.service.AthenticateServiceImpl;
 import kr.or.ddit.login.service.AuthenticateService;
 import kr.or.ddit.member.UserNotFoundException;
 import kr.or.ddit.member.dao.MemberDAO;
-import kr.or.ddit.member.dao.MemberDAOImpl;
 import kr.or.ddit.vo.MemberVO;
 import kr.or.ddit.vo.PaginationInfo;
+import kr.or.ddit.vo.ProdVO;
+import lombok.RequiredArgsConstructor;
 
+
+@RequiredArgsConstructor
+@Service
 public class MemberServiceImpl implements MemberService {
+	
+	@Value("#{appInfo.memImagesUrl}")
+	private String memImagesUrl;
 
-	private MemberDAO dao = new MemberDAOImpl();
-	private AuthenticateService authService = new AthenticateServiceImpl();
+	@Value("#{appInfo.memImagesUrl}")
+	private Resource memImages;
+
+	private File saveFolder;
+
+	@PostConstruct // 생성자 이후에 실행
+	public void init() throws IOException {
+		saveFolder = memImages.getFile();
+	}
+	
+	
+
+	private final MemberDAO dao;
+	
+	@Inject
+	private AuthenticateService authService;
+	
+//	private void processMemImage(MemberVO member)  {
+//		member.saveTo(saveFolder);  //상품이미지 저장	
+//}
 
 	@Override
 	public ServiceResult CreateMember(MemberVO member) {

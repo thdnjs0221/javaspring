@@ -39,6 +39,22 @@
 		<filter-name>MultipartFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	<filter>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>GeneratePricipalFilter</filter-name>
+		<filter-class>kr.or.ddit.filter.GeneratePricipalFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>GeneratePricipalFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 
 	<!-- The front controller of this Spring Web application, responsible for 
@@ -54,10 +70,13 @@
 		<multipart-config></multipart-config>
 	</servlet>
 
-	<!-- Map all requests to the DispatcherServlet for handling -->
+	<!-- Map all requests to the DispatcherServlet for handling 
+			
+	
+	-->
 	<servlet-mapping>
 		<servlet-name>springDispatcherServlet</servlet-name>
-		<url-pattern>*.do</url-pattern>
+		<url-pattern>/</url-pattern>
 		<url-pattern>/index.do</url-pattern>
 	</servlet-mapping>
 </web-app>

@@ -28,8 +28,13 @@
             </thead>
             <tbody>
                <c:set var="buyer" value="${prod.buyer }" />
-               <tr>
-                  <td>${buyer.buyerName }</td>
+					<tr>
+						<td>
+							<c:url value="/buyer/${buyer.buyerId }" var="buyerViewUrl" />
+							<a href="${buyerViewUrl }">
+                  		${buyer.buyerName }
+                  	</a>
+                  </td>
                   <td>${buyer.buyerAdd1 }</td>
                   <td>${buyer.buyerCharger }</td>
                   <td>${buyer.buyerBank }</td>

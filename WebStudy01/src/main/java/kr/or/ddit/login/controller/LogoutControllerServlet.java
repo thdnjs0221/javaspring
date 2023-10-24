@@ -19,9 +19,11 @@ public class LogoutControllerServlet extends HttpServlet {
 		
 	
 		// 검증 코드!!!!!!
-		HttpSession session = req.getSession(false);  
-		//이것은 새로운 세션을 만들지 말고, 현재 요청과 관련된 세션이 이미 존재하는 경우 해당 세션을 반환하거나, 
-		//세션이 없는 경우 null을 반환하라는 의미
+		HttpSession session = req.getSession(false); // flase ->null 
+		if( session==null ||  session.isNew()) { //최초의 요청일때 (정상적인 로그아웃이 아닐때 )
+			resp.sendError(400,"로그인 하지도 않았는데!!");
+			return;
+		}
 		
 		
 		// 1.authid 속성 아이디 지우고
@@ -34,8 +36,7 @@ public class LogoutControllerServlet extends HttpServlet {
 		String goPage ="redirect:/";
 				
 		if(goPage.startsWith("redirect:")) { //Redirect
-			String location = req.getContextPath() + goPage.substring("redirect:".length()); 
-			//redirect:" 부분을 제외한 나머지 부분을 가져옴. 이 부분은 실제로 리다이렉션할 페이지의 경로
+			String location = req.getContextPath() + goPage.substring("redirect:".length());
 			resp.sendRedirect(location);
 			
 		}else {//Dispatcher로 이동

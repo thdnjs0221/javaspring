@@ -17,10 +17,16 @@
       <a class="nav-link" href="<c:url value='/prod/ajax/prodListUI.do'/>">상품관리(비동기처리)</a>
     </li>
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">제조사관리</a>
+      <a class="nav-link" href="<c:url value='/buyer'/>">제조사관리</a>
     </li>
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">게시판</a>
+      <a class="nav-link" href="#">자유게시판</a>
+    </li>
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="?lang=en">영문</a>
+    </li>
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="?lang=ko">한글</a>
     </li>
   </ul>
   <ul class="nav px-3 col-2">

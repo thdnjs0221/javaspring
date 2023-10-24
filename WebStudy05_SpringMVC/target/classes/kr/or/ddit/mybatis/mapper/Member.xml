@@ -15,7 +15,7 @@
          <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(simpleCondition.searchWord)"> <!--simpleCondition.serachWord가 비어있지 않는 경우에만 실행  -->
             <choose>
                <when test="simpleCondition.searchType eq 'name'">  <!--검색어(simpleCondition.serachWord)가 데이터베이스 열 MEM_NAME에 포함되어 있는지 확인하는 조건  -->
-                  INSTR(MEM_NAME, #{simpleCondition.serachWord}) > 0  <!--INSTR 함수는 검색어를 찾으면 해당 문자열의 인덱스를 반환하며, > 0을 통해 인덱스가 0보다 크면 검색어가 존재한다는 것을 의미  -->
+                  INSTR(MEM_NAME, #{simpleCondition.searchWord}) > 0  <!--INSTR 함수는 검색어를 찾으면 해당 문자열의 인덱스를 반환하며, > 0을 통해 인덱스가 0보다 크면 검색어가 존재한다는 것을 의미  -->
                </when>
                <when test="simpleCondition.searchType eq 'address'">
                   INSTR(MEM_ADD1, #{simpleCondition.searchWord}) > 0

@@ -37,6 +37,8 @@
 		<!-- Custom styles for this template -->
 		<link href="<%=request.getContextPath()%>/resources/css/dashboard.css" rel="stylesheet">
 	</head>
+	
+<!-- 	바디 데이터 pageContext을 속성을 만들고 스크립트에서 꺼내서 사용하기 (절대 경롤)-->
 	<body class="d-flex flex-column vh-100" data-context-path="${pageContext.request.contextPath }">
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 			<tiles:insertAttribute name="headerMenu"/>

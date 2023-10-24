@@ -7,8 +7,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd">
 
-
-<!--  -->
+<!--마이바티스 연동  -->
+<!--FactoryBean ->  생성되는 객체 등록,   -->
 <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory" 
 	p:configLocation="classpath:kr/or/ddit/mybatis/Configuration.xml"
 	p:dataSource-ref="dataSource"
@@ -22,7 +22,7 @@
 	c:sqlSessionFactory-ref="sqlSessionFactory"
  />
  
- <!-- 인터페이스 지정하면 알아서 proxy 생성! annotation을 사용하여 제한 걸어두기  -->
+ <!-- 인터페이스 지정하면 알아서 proxy 생성! 필터링 조건으로 annotation을 사용하여 제한 걸어두기 (mapper 어노테이션 있는경우만 프록시 생성) -->
  <mybatis-spring:scan base-package="kr.or.ddit.**.dao"
  	annotation="org.apache.ibatis.annotations.Mapper"
  	factory-ref="sqlSessionFactory"

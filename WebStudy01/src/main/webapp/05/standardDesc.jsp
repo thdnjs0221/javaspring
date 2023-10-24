@@ -1,20 +1,11 @@
 <%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>05/standardDesc.jsp</title>
-<style>
-/* comment3 */
-</style>
-</head>
-<body>
+
 <h4>JSP 스펙과 Container</h4>
 <pre>
 	JSP(Jakarta Server Page) : 자바와 서블릿 스펙을 기반으로 한, 템플릿 엔진
-	JSP Container ? 템플릿 엔진의 제공자로 jsp 인스턴스의 생명주기 관리자(Container)
+	JSP Container** ? 템플릿 엔진의 제공자로 jsp 인스턴스의 생명주기 관리자(Container)
 	JSP Container 동작단계
 	1. jsp 템플릿 파일로부터 서블릿 소스 생성.
 	2. 컴파일
@@ -46,7 +37,11 @@
 			<%-- comment5 --%>
 			- client side comment(가급적이면 사용하지 않기) : HTML comment , JS comment, CSS comment
 			- server side comment : JAVA comment, JSP comment
-		6) action tag 
+		6) action tag :커스텀 태그의 일종으로 jsp 스펙에서 기본 제공되는 커스텀 태그 (include뺴고는 거의 쓸일 없음)
+			커스텀 태그 사용 방법
+			&lt; prefix:tagName attribute_name="value"/&gt;
+			
+			
 		7) EL (Express Language, 표현 언어), \${elVariables }
 		8) JSTL(Jsp Standard Tag Library)
 
@@ -55,5 +50,3 @@
 	
 	// comment2
 </script>
-</body>
-</html>

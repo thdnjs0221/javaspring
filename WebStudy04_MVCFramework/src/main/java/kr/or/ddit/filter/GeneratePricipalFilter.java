@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.or.ddit.filter.wrapper.PrincipalHttpServletRequestWrapper;
+import kr.or.ddit.mvc.annotation.stereotype.Controller;
 import kr.or.ddit.vo.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 

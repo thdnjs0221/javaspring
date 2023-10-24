@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -16,6 +17,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,6 +73,21 @@ public class ImageFormServlet_ver4 extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		Cookie[] cookies = req.getCookies();
+		String imgCookieValue = "";
+		if(cookies!=null) {
+			for(Cookie tmp:cookies) {
+				if("imgCookie".equals(tmp.getName())) {
+					imgCookieValue = URLDecoder.decode( tmp.getValue(),"utf-8");
+					break;
+				}
+			}
+		}
+		
+		req.setAttribute("imgCookieValue", imgCookieValue);
+		
+		
 		//람다식: 코드를 줄이는 //람다 한 문장일 경우 바디,return 생략가능!
 		String[] imageFileNames= imageFolder.list(((d,n)-> Optional.ofNullable(application.getMimeType(n)) //nullpoint 피할수있음
 															.orElse("").startsWith("image/")));
@@ -92,6 +109,7 @@ public class ImageFormServlet_ver4 extends HttpServlet {
 		
 		req.setAttribute("cPath", Cpath);
 		req.setAttribute("options", options);
+		
 		
 		String viewName= "/WEB-INF/views/04/imageForm.jsp";
 		

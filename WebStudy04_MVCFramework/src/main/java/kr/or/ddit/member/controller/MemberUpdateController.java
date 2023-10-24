@@ -34,7 +34,6 @@ import kr.or.ddit.mvc.annotation.RequestMethod;
 import kr.or.ddit.mvc.annotation.resolvers.ModelAttribute;
 import kr.or.ddit.mvc.annotation.stereotype.Controller;
 import kr.or.ddit.mvc.annotation.stereotype.RequestMapping;
-import kr.or.ddit.utils.PopulateUtils;
 import kr.or.ddit.utils.ValidationUtils;
 import kr.or.ddit.validate.grouphint.UpdateGroup;
 import kr.or.ddit.vo.MemberVO;

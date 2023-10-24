@@ -3,6 +3,7 @@ package kr.or.ddit.member.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,17 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.adrs.service.AddressService;
 import kr.or.ddit.adrs.service.AddressServiceImpl;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
-import kr.or.ddit.mvc.ViewResolverComposite;
-import kr.or.ddit.mvc.annotation.RequestMethod;
-import kr.or.ddit.mvc.annotation.resolvers.ModelAttribute;
-import kr.or.ddit.mvc.annotation.resolvers.RequestParam;
-import kr.or.ddit.mvc.annotation.stereotype.Controller;
-import kr.or.ddit.mvc.annotation.stereotype.RequestMapping;
 import kr.or.ddit.paging.BootstrapPaginationRender;
 import kr.or.ddit.vo.MemberVO;
 import kr.or.ddit.vo.PaginationInfo;
@@ -39,8 +40,10 @@ import kr.or.ddit.vo.SearchVO;
  * */
 //@WebServlet("/member/memberList.do")
 @Controller
-public class MemberListController extends HttpServlet{
-	 private MemberService service = new MemberServiceImpl();
+public class MemberListController {
+	
+	@Inject
+	 private MemberService service;
 	
 	@RequestMapping( value = "/member/memberList.do", method = RequestMethod.GET)
 	public String list(
@@ -48,7 +51,7 @@ public class MemberListController extends HttpServlet{
 			, @RequestParam(value = "page", required = false, defaultValue = "1") int currentPage							
 			, @RequestParam(value = "searchType", required = false)String searchType						
 			, @RequestParam(value = "searchWord", required = false)String searchWord						
-			, HttpServletRequest req)  {
+			, Model model)  {
 		
 		//검증의 대상이 아님 / searchForm에서 온 3개의 파라미터 
 	
@@ -61,7 +64,7 @@ public class MemberListController extends HttpServlet{
 		paging.setRenderer(new BootstrapPaginationRender());
 		
 		service.retrieveMemberList(paging);
-		req.setAttribute("paging", paging);
+		model.addAttribute("paging", paging);
 		
 		//뷰이동
 		return "member/memberList";

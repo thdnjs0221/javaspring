@@ -42,9 +42,10 @@
 									value="${buyer.buyerId  }" />
 							</c:forEach>
 						</c:if>
-					</select> <input type="text" name="prodName" placeholder="상품명" /> <input
-						type="button" value="검색" id="searchBtn" /> <a
-						href="<c:url value='/prod/prodInsert.do'/>"> 신규상품 등록</a>
+					</select> 
+					<input type="text" name="prodName" placeholder="상품명" /> 
+					<input type="button" value="검색" id="searchBtn" /> 
+					<a href="<c:url value='/prod/prodInsert.do'/>"> 신규상품 등록</a>
 				</div>
 			</td>
 		</tr>
@@ -74,9 +75,9 @@ $("select[name=prodLgu]").on("change",function(event){
 	}	
 });
 
-$(":input[name=prodLgu]").val("${paging.detailCondition.prodLgu}").trigger("change");
-$(":input[name=prodBuyer]").val("${paging.detailCondition.prodBuyer}");
-$(":input[name=prodName]").val("${paging.detailCondition.prodName}");
+// $(":input[name=prodLgu]").val("${paging.detailCondition.prodLgu}").trigger("change");
+// $(":input[name=prodBuyer]").val("${paging.detailCondition.prodBuyer}");
+// $(":input[name=prodName]").val("${paging.detailCondition.prodName}");
 
 function makeTrTag(prod){
 	let cPath = document.body.dataset.contextPath;

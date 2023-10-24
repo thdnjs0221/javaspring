@@ -3,14 +3,16 @@ package kr.or.ddit.login.service;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.stereotype.Service;
 
 import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.member.dao.MemberDAO;
-import kr.or.ddit.member.dao.MemberDAOImpl;
 import kr.or.ddit.vo.MemberVO;
-
+import lombok.RequiredArgsConstructor;
+@RequiredArgsConstructor
+@Service
 public class AthenticateServiceImpl implements AuthenticateService {
-	private MemberDAO memberDAO = new MemberDAOImpl();
+	private final MemberDAO memberDAO;;
 
 	@Override
 	public ServiceResult authenticate(MemberVO inputData) {

@@ -3,6 +3,7 @@ package kr.or.ddit.login.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -12,22 +13,22 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.common.enumpkg.ServiceResult;
 import kr.or.ddit.login.service.AthenticateServiceImpl;
 import kr.or.ddit.login.service.AuthenticateService;
-import kr.or.ddit.mvc.ViewResolverComposite;
-import kr.or.ddit.mvc.annotation.RequestMethod;
-import kr.or.ddit.mvc.annotation.resolvers.RequestParam;
-import kr.or.ddit.mvc.annotation.stereotype.Controller;
-import kr.or.ddit.mvc.annotation.stereotype.RequestMapping;
 import kr.or.ddit.vo.MemberVO;
 
 //@WebServlet("/Login/loginProcess.do")
 @Controller
 public class LoginProcessController {
 
-	private AuthenticateService service = new AthenticateServiceImpl();
+	@Inject
+	private AuthenticateService service;
 
 
 

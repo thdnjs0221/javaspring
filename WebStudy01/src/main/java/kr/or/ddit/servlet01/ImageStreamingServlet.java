@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,6 +63,12 @@ public class ImageStreamingServlet extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,MessageFormat.format("{0} 이미지 파일이 없음", imageName));
 			return;
 		}
+		
+		//쿠키생성
+		Cookie imgcookie = new Cookie("imgCookie",imageName); 
+		imgcookie.setMaxAge(60*60*24*7);
+		imgcookie.setPath(request.getContextPath());
+		response.addCookie(imgcookie);
 			
 		//톰캣과 대화할때getServletContext  사용 MIME type 
 		ServletContext application = getServletContext();

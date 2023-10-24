@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,98 +40,84 @@ import lombok.RequiredArgsConstructor;
 //@WebServlet("/prod/prodUpdate.do")
 @Controller
 @RequiredArgsConstructor
-public class ProdUpdateController  {
-	
-	@Value("/resources/prodImages")
-	private String pridImagesUrl;
-	
-	@Value("/resources/prodImages")
-	private Resource prodImages;
-	
-	private File saveFolder;
-	
-	@PostConstruct  //생성자 이후에 실행
-	public void init() throws IOException {
-		saveFolder =  prodImages.getFile();
-	}
+public class ProdUpdateController {
 
-	
+
+
 	private final ProdService service;
-	
+
 	@Inject
 	private OthersDAO othersdao;
 
-	@ModelAttribute("lprodList") 
-	public List<LprodVO> lprodList(){
+	@ModelAttribute("lprodList")
+	public List<LprodVO> lprodList() {
 		return othersdao.selectLprodList();
 	}
-	
+
 	@ModelAttribute("buyerList")
-	public List<BuyerVO>buyerList(){
+	public List<BuyerVO> buyerList() {
 		return othersdao.selectBuyerList(null);
-		
+
 	}
-	
+
 	@RequestMapping("/prod/prodUpdate.do")
-	public String Prod(Model model
-			,@RequestParam(value = "what", required = true) String prodId ){
-	
+	public String Prod(
+			Model model, @RequestParam(value = "what", required = true) String prodId
+			) {
 
 		ProdVO prod = service.retrieveProd(prodId);
 		model.addAttribute("prod", prod);
 
-		// ui
 		return "prod/prodEdit";
-		
+
 	}
 
-	@RequestMapping(value ="/prod/prodUpdate.do" , method = RequestMethod.POST )
-	public String prodUpdate(@ModelAttribute("prod") ProdVO prod,
-			MultipartFile prodImage,
-			Model model, HttpServletResponse resp) throws IOException{
-		
-	
-			// 업로드된 이미지가 있는지 검증!
-			if (!prodImage.isEmpty()) {
+	/**
+	 * 스프링을 이용한 객체 검증 (H/V + Spring)
+	 * 1. 검증 대상이 되는 command object 에 @Valid(그룹힌트 못줌) / @Validated(그룹힌트 가능)  를 사용
+	 * 2. command object 바로 다음 파라미터 검증 결과(Errors/ BindingResult) 객체 선언.
+	 * 3. errors.hasErrors 로 검증 통과 여부 확인
+	 * 4. 검증 결과 메시지 출력시 , form:errors 커스텀 태그 활용.
+	 * 
+	 */
+	@RequestMapping(value = "/prod/prodUpdate.do", method = RequestMethod.POST)
+	public String prodUpdate(
+			@Validated(UpdateGroup.class)@ModelAttribute("prod") ProdVO prod,
+			Errors errors,
+			Model model 
+	) throws IOException {
 
-				String filename = UUID.randomUUID().toString();
+//		prod.saveTo(saveFolder);
 
-				// String filename = prodImage.getOriginalFilename();
-				File saveFile = new File(saveFolder, filename);
-				// 상품이미지의 2진 데이터 저장
-				prodImage.transferTo(saveFile); // 이미지 저장
-				prod.setProdImg(filename); // 메타데이터는 디비에 저장
-			}
-		
-			Map<String, List<String>> errors = new HashMap<>(); // 에러메세지
-			model.addAttribute("errors", errors);
-			// 3. 검증
-			boolean valid = ValidationUtils.validate(prod, errors, UpdateGroup.class); // 검증 별도의 유틸리티로
-			String viewName = null;
+//		Map<String, List<String>> errors = new HashMap<>(); // 에러메세지
+//		model.addAttribute("errors", errors);
+//		
+//		// 3. 검증
+		boolean valid = !errors.hasErrors(); 
+		String viewName = null;
 
-			if (valid) {
-				// 검증 통과
-				ServiceResult result = service.modifyProd(prod);
-				switch (result) {
-				case OK:
-					// 2) OK
-					viewName = "redirect:/prod/prodView.do?what"+prod.getProdId();
+		if (valid) {
+			// 검증 통과
+			ServiceResult result = service.modifyProd(prod);
+			switch (result) {
+			case OK:
+				// 2) OK
+				viewName = "redirect:/prod/prodView.do?what=" + prod.getProdId();
 
-					break;
+				break;
 
-				default:
-					// 3) FAIL
-					model.addAttribute("message", "서버오류, 조금 이따 다시 해보세요");
-					viewName = "prod/prodEdit";
-					break;
-				}
-
-			} else {
-				// 검증 불통
+			default:
+				// 3) FAIL
+				model.addAttribute("message", "서버오류, 조금 이따 다시 해보세요");
 				viewName = "prod/prodEdit";
-
+				break;
 			}
-			return viewName;
-		}
-	}
 
+		} else {
+			// 검증 불통
+			viewName = "prod/prodEdit";
+
+		}
+		return viewName;
+	}
+}

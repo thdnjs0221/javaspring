@@ -7,8 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.ddit.file.MultipartFile;
-import kr.or.ddit.filter.mvc.wrapper.StandardMultipartHttpServletRequest;
+import kr.or.ddit.file.utils.MultipartFile;
+import kr.or.ddit.filter.utils.StandardMultipartHttpServletRequest;
 import kr.or.ddit.mvc.annotation.RequestMappingHandlerAdapter.BadRequestException;
 
 public class RequestPartMethodArgumentResolver implements HandlerMethodArgumentResolver {

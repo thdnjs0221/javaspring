@@ -1,7 +1,8 @@
 <%@page import="java.security.Principal"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>   
 <h4>웰컴페이지 : ${title }</h4>
 
 <c:set var="cPath" value="${pageContext.request.contextPath }" scope="application"/>
@@ -30,3 +31,6 @@
       <a href="${cPath }/member/memberInsert.do">회원가입</a>
    </c:otherwise>
 </c:choose>
+
+<!-- message acceptor를 사용해줌  -->
+<h4>검색된 메세지: <spring:message code="hi" arguments="반장"></spring:message> </h4>

@@ -28,6 +28,7 @@
 	p:dataSource-ref="dataSource"
 />
 
+<!--커밋, 롤백 해주는 역할  -->
 <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
 	id="transactionManager"
 	p:dataSource-ref="dataSource"

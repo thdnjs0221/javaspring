@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import kr.or.ddit.vo.MemberVO;
 
 public class PrincipalHttpServletRequestWrapper extends  HttpServletRequestWrapper{
+	
+	
 	private HttpServletRequest request;
 	
 //	HttpServletRequest 원본요청이면서 adaptee

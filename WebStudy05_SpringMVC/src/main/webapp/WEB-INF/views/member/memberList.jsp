@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <table class="table table-border">
 	<thead>
@@ -42,11 +43,11 @@
 			<td colspan="7">
 				${paging.pagingHTML }
 				<div id="searchUI"> <!--입력받을 폼  -->
-					<select name="searchType">
-						<option value>전체</option>
-						<option value="name">이름</option>
-						<option value="address">지역</option>
-					</select>
+					<form:select name="searchType" path="simpleCondition.searchType" class="form-select">
+						<form:option label="전체"  value="" />
+						<form:option label="이름" value="" />
+						<form:option label="지역" value=""  />
+					</form:select>
 						<input type="text" name="searchWord"/>
 						<input type="button" value="검색" id="searchBtn"/>
 				</div>
@@ -55,11 +56,11 @@
 	</tfoot>
 </table>
 <!--전송하는 hidden폼 페이지랑 검색 동시에! -->
-<form id="searchForm">
-	<input type="text" name="searchType"/>
-	<input type="text" name="searchWord"/>
+<form:form id="searchForm" modelAttribute="simpleCondition" method="get">
+	<form:input path="searchType" />
+	<form:input path="searchWord" />
 	<input type="text" name="page"/>
-</form>
+</form:form>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,8 +84,9 @@
 
 <script>
 
-	$(":input[name=searchType]").val("${simpleCondition.searchType}");
-	$(":input[name=searchWord]").val("${simpleCondition.searchWord}");
+// 	$(":input[name=searchType]").val("${simpleCondition.searchType}");
+// 	$(":input[name=searchWord]").val("${simpleCondition.searchWord}");
+	
 	//페이징도 같이 서버로 보내기(서버+검색조건)
 	function fn_paging(page){
 		searchForm.page.value = page;

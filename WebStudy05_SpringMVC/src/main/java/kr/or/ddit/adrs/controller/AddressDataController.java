@@ -7,78 +7,71 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import kr.or.ddit.adrs.service.AddressService;
 import kr.or.ddit.adrs.service.AddressServiceImpl;
-import kr.or.ddit.mvc.annotation.RequestMethod;
-import kr.or.ddit.mvc.annotation.resolvers.ModelAttribute;
-import kr.or.ddit.mvc.annotation.stereotype.Controller;
-import kr.or.ddit.mvc.annotation.stereotype.RequestMapping;
 import kr.or.ddit.vo.AddressVO;
 
 //@WebServlet({ "/adrs/address", "/adrs/address/*" }) // 주소록 하나만을 표현 -> crud 중 어떤걸 할지는 메소드로
-@Controller
+/**
+ *  /adrs/address (GET)  주소록 조회 
+ *  /adrs/address (POST)  주소록 추가  
+ *  /adrs/address/23 (GET)  주소록 23번 주소록 조회  
+ *  /adrs/address/23 (PUT)  주소록 23번 주소록 수정 
+ *  /adrs/address/23 (DELETE)  주소록 23번 주소록 삭제 
+ *  
+ *
+ */
+@Controller("/adrs/address")
 public class AddressDataController {
-private AddressService service = new AddressServiceImpl();
 	
-	@RequestMapping("/adrs/address")
-	public String adrsList(Principal principal, HttpServletRequest req) {
-		
-		String uri= StringUtils.substringAfter(req.getRequestURI(), req.getContextPath());
-		int lastIdx = uri.lastIndexOf("/");
-		int uriLen = uri.length();
-		int baseLen = "/adrs/address".length();
-		boolean valid = lastIdx >= baseLen && lastIdx < uriLen - 1;
-		System.out.printf("%s : %b\n", uri, valid);
+	@Inject
+	private AddressService service ;
+	
+	@GetMapping("/adrs/address")
+	public String adrsList(Principal principal, Model model) {
 		
 		String memId = principal.getName();
 		List<AddressVO> adrsList = service.retriveAddressList(memId);
 		
-		req.setAttribute("adrsList", adrsList);
+		model.addAttribute("adrsList", adrsList);
 		
 		return "jsonView";
 	}
 	
-    private ObjectMapper mapper = new ObjectMapper();
+//    private ObjectMapper mapper = new ObjectMapper(); 이제 사용 안함
 	
-	private boolean validate(AddressVO vo, Map<String, String> errors) {
-		boolean valid = true;
-		if(StringUtils.isBlank(vo.getAdrsName())) {
-			errors.put("adrsName", "이름 누락");
-			valid = false;
-		}
-		if(StringUtils.isBlank(vo.getAdrsHp())) {
-			errors.put("adrsHp", "휴대폰 번호 누락");
-			valid = false;
-		}
-		return valid;
-	}
-	
-	@RequestMapping(value="/adrs/address", method = RequestMethod.POST)
-	public String doPost(HttpServletRequest req, Principal principal) throws IOException{
-		try(
-			InputStream is = req.getInputStream();
-		){
-			AddressVO vo = mapper.readValue(is, AddressVO.class);
-			req.setAttribute("originalData", vo);
+	@PostMapping(value="/adrs/address")
+	public String doPost(@Valid @RequestBody AddressVO vo, Errors errors ,Model model, Principal principal) {
+//		try(
+//			InputStream is = req.getInputStream();  //원문 데이터 꺼내기 위한 (req에 담겨서 온)
+//		){
+//			AddressVO vo = mapper.readValue(is, AddressVO.class); //언마샬링 단계 
+			
+		//언마샬링 직접 안하고 vo에서..request 에 있는 바디에 있는걸 언마살링@RequestBody로 대신!!!
+			
+			model.addAttribute("originalData", vo);
 			
 //			String authId = (String) req.getSession().getAttribute("authId");
 			
 			vo.setMemId(principal.getName());
 			
-			Map<String, String> errors = new HashMap<>();
-			req.setAttribute("errors", errors);
-			boolean valid = validate(vo, errors);
+			
+			boolean valid = !errors.hasErrors();
 			
 			boolean success = false;
 			String message = null;
@@ -92,42 +85,23 @@ private AddressService service = new AddressServiceImpl();
 				message = "필수파라미터 누락";
 			}
 			
-			req.setAttribute("success", success);
-			req.setAttribute("message", message);
-		}
+			model.addAttribute("success", success);
+			model.addAttribute("message", message);
+		
 		
 		return "jsonView";
 	}
 	
-	@RequestMapping(value="/adrs/address", method = RequestMethod.DELETE)
-	public String doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String uri= StringUtils.substringAfter(req.getRequestURI(), req.getContextPath());
-		int lastIdx = uri.lastIndexOf("/");
-		int uriLen = uri.length();
-		int baseLen = "/adrs/address".length();
-		boolean valid = lastIdx >= baseLen && lastIdx < uriLen - 1;
-		String adrsNoPart = uri.substring(lastIdx+1);
-//		if(valid) {
-//			adrsNoPart = uri.substring(lastIdx+1);
-//			valid = StringUtils.isNumeric(adrsNoPart);
-//		}
-		int adrsNo = -1;
-		try {
-			adrsNo = Integer.parseInt(adrsNoPart);
-		}catch (NumberFormatException e) {
-			valid = false;
-		}
-		if(!valid) {
-			resp.sendError(400, "주소록 번호가 없음.");
-			return null;
-		}
-		boolean success = service.removeAddress(adrsNo);
-		req.setAttribute("success", success);
-		if(!success) {
-			req.setAttribute("message", "삭제 실패");
-		}
-		
-		return "jsonView";
-	}
+//	/adrs/address/23 path...로 경로변수 처리
+	// 경로 변수가 없으면 requestparam 이라고 생각함 
+	public String doDelete(@PathVariable int adrsNo, Model model) throws ServletException, IOException {
+	      boolean success = service.removeAddress(adrsNo);
+	      model.addAttribute("success", success);
+	      if(!success) {
+	         model.addAttribute("message", "삭제 실패");
+	      }
+	      
+	      return "jsonView";
+	   }
 }
 

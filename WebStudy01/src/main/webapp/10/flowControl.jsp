@@ -18,7 +18,7 @@
  			String path = "/05/standardDesc.jsp"; //절대경로(서버가 사용하는 주소)
  			//RequestDispatcher rd= request.getRequestDispatcher(path);
  			//rd.forward(request, response);  //클라이언트 입장에서는 응답 :a /b의 존재를 모름(b에서 응답이 나옴)
- 			//rd.include(request, response); //a+b응답  클라이언트 입장에서는 응답 :a
+ 			//rd.include(request, response);  //a+b응답  클라이언트 입장에서는 응답 :a
  			String location = request.getContextPath()+path; //클라이언트가 사용하는 주소(contextpath있어야함)
  			response.sendRedirect(location); //b의 존재를 안다 , 한번의 요청이 끝나고 의도적으로 삭제하고 싶을때 사용(로그인처리, 보안처리) 
 		%> 
@@ -29,8 +29,6 @@
 		
 	2. Redirect : reponse body가 없는 응답이 전송되면서, 원본 요청이 제거되고 , 완전히 새로운 요청이 발생하는 방식
 					Location 헤더를 통해 클라이언트가 발생시킬 새로운 요청의 주소를 설정함.
-
-
 </pre>
 </body>
 </html>

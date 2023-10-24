@@ -8,7 +8,7 @@
 <jsp:include page="/includee/preScript.jsp"/>
 <% 
 String message = (String)session.getAttribute("message");
-session.removeAttribute("message"); //flash attribute
+session.removeAttribute("message"); //**flash attribute
 if(message!=null && message.trim().isEmpty()){
 	
 %>
@@ -21,13 +21,19 @@ alert("<%=message%>");
 }
 %>
 </head>
+<%
+Cookie[] cookie = request.getCookies();
 
+
+
+%>
 <body>
 <form method="post" action="<%=request.getContextPath() %>/Login/loginProcess.do" enctype="application/x-www-form-urlencoded">
 	
 	<ul>
 		<li>
 			아이디: <input type="text" name="memId"/>
+			<input type="checkbox" name="idSave" value="saveId"/>아이디 저장하기
 		</li>
 		<li>
 			비밀번호: <input type="text" name="memPass"/>

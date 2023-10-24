@@ -7,7 +7,10 @@ public enum NumericOpertorType {
 	PLUS('+', (l,r)->l+r),
 	MINUS('-', (l,r)->l-r), 
 	MULTIPLY('*', (l,r)->l*r), 
-	DIVIDE('/', (l,r)->{return l/ r;});
+	DIVIDE('/', (l,r)->{return l/ r;}),
+	MODULAR('%', (l,r)->l%r);
+	
+	
 	
 	
 	private NumericOpertorType(char sign, BiOperandOperator realOperator) {

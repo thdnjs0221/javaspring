@@ -48,8 +48,8 @@ $(function(){
       event.preventDefault();
       let url = this.action;
       let method = this.method;
-      let data = $(this).serializeJSON(); // 폼에서 입력한 데이터 값을 json직렬화  
-      let json = JSON.stringify(data); //이전 단계에서 생성된 json객체를 문자열로 직렬화 (Ajax 요청 메서드 사용할때 데이터를 서버로 전송하려면 문자열 형태로 변환해야함)
+      let data = $(this).serializeJSON(); // 객체를 만드는 단계 ,폼에서 입력한 데이터 값을 json직렬화  
+      let json = JSON.stringify(data); //마샬링 단계, 이전 단계에서 생성된 json객체를 문자열로 직렬화 (Ajax 요청 메서드 사용할때 데이터를 서버로 전송하려면 문자열 형태로 변환해야함)
       let settings = {
          url : baseUrl,
          method : method,
@@ -84,7 +84,7 @@ $(function(){
       let adrsTr = $(this).parents("tr:first"); // 삭제버튼(this)부모 중에서 첫번째 tr태그 
       let $adrsTr = $(adrsTr);
       let adrsNo = $adrsTr.data("adrsNo");   // 데이터 속성 값 가져오기 <tr data-adrs-no="${adrsVO.adrsNo}"> js파일
-      let url = `${baseUrl}/${adrsNo}`;
+      let url = `${baseUrl}/${adrsNo}`;  //경로 변수 방식
       
       let settings = {
          url : url,

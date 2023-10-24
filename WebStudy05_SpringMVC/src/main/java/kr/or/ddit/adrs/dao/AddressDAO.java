@@ -2,6 +2,7 @@ package kr.or.ddit.adrs.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import kr.or.ddit.vo.AddressVO;
@@ -12,7 +13,7 @@ import kr.or.ddit.vo.AddressVO;
  *
  *
  */
-
+@Mapper
 public interface AddressDAO {
 	
 	

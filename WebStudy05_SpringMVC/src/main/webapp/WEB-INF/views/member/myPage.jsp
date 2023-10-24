@@ -2,13 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<c:if test="${not empty message }">
-	<script type="text/javascript">
-		alert("${message}")
-	</script>
-	<c:remove var="message" scope="session" />
-	<!--어떤 스코프 써주기  -->
-</c:if>
 
 <!--응답 컨텐츠가 html인 경우엔 el이 더 많이 활용함  -->
 

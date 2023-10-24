@@ -18,7 +18,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath() %>/resources/js/jquery-3.7.1.min.js"></script>
 <style>
    .before,.after{
       color: silver;
@@ -50,7 +50,7 @@
  	Locale locale = request.getLocale();
 
 %>
-<!-- html 요소들은 다 클라이언트사이드라 경로 <%=request.getContextPath() %>/calender -->
+<!-- html 요소들은 다 클라이언트사이드 -->
 <form id="calForm"  method="post"
 action="<%=request.getContextPath() %>/calender"
 >
