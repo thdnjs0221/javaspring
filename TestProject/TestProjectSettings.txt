@@ -1,0 +1,57 @@
+
+
+개발시 사용하고 있는 STS는 3.9.15.REALEASE 버전에 해당하며 , 이클립스는 e4.16버전에 해당합니다
+다양한STS(e_version)버전들이 존재하지만, 우리가 사용하는 JDK1.8버전과  spring framework 호환성의 문제가 
+가정 적은 3.9.15버전을 선택해서 사용중
+
+1.STS 3.9.15 Tool 설치 후 실행
+2. workspace 경로 설정 후 STS진입
+3.enc ,font 설정
+>window>preferences enc/font 검색 후 진행
+>font 는 본인이 원하는 종류로 설정(나는 consolas)
+4.웹 서버 실행 환경 설정 
+>window>preferences>server>runtime Environments 
+>깆ㄴ 등록되어 있는 vm서버 설정은 삭제
+>우리가 사용하고자 하는  tomcat 8.5 추가 
+추가시 톰캣 폴더까지 선책 후 추가 
+JRE 부분에서 사용할 JDK 버전 선택 
+
+5. 이클립스 자바 설정 
+window prefernce java installed JREs 
+기존 JRE는 삭제 
+우리가 사용하고 있는 버전의 jdk 폴더를 찾아서 bin 폴더 선택후 추가 
+
+6. 스프링 mvc 프로젝트 생성
+spring legacy project 생성
+프로젝트 명, 패키지 , template 선택후 진행 
+플젝명 : TEstproject
+패키지 kr.or.ddit
+template : spring mvc project
+
+7. mvc 프로젝트 파일 구성 확인하기 
+web.xml pom.xml root-context.xml servlet-context.xml webapp 등등 관련 파일들이 존재하는지 확인
+간혹 mvc project 잘 못 생성되어 관련 파일들이 여러개 누락되어 있는지 꼭 확인
+
+8. 웹서버 설정 변경
+sever 의 overview > timeout 120초 설정 / port80 설정 
+server 의 moudule > path > '/' 변경
+
+9. 개발환경 버전 변경 
+pom.xml  변경
+depency중 servlet api 에 해당하는 버전과 artifactid를 변경 
+artifactid: javax.servlet-api
+version 3.1.0
+
+java - verㄴion 과 spring framework 버저 ㄴ변경 
+자바 1.8
+스프링 프레임워크 5.3.25
+
+** pom.xml 변경했다면 해당 프로젝트에 메이븐 설정 반영 
+
+** encoding 
+
+
+
+
+
+

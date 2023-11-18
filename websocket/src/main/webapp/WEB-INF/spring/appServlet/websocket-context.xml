@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="chatHandler"  class="com.anboyoung.socket.handler.ChatHandler" />
+	<websocket:handlers allowed-origins="*">
+	<!-- 	path는 중개소 주소를 의미, -->
+		<websocket:mapping handler="chatHandler" path="/merong" />
+<!-- 		http세션과 socket세션이 달라서, 인터셉터로 잡아서 http세션을 socket세션에 넣어주는 애 -->
+		<websocket:handshake-interceptors>
+			<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+
+</beans>

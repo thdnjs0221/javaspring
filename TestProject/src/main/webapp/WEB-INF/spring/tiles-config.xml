@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	<definition name="mainTemplate" template="/WEB-INF/views/mainTemplate.jsp">
+	
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp"> </put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp"> </put-attribute>
+	
+	</definition>
+	 
+<!-- 	동적으로  바뀔 컨텐트 -->
+	 <definition name="notice/*" extends="mainTemplate">
+	 	<put-attribute name="content" value="/WEB-INF/views/notice/{1}.jsp" />
+	 </definition>
+
+</tiles-definitions>
+

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!--mapper   -->
+  <mapper namespace="kr.or.ddit.mapper.IBoardMapper">
+  	<insert id="insertBoard" parameterType="boardVO" useGeneratedKeys="true">
+  		<selectKey keyProperty="boNo" resultType="int" order="BEFORE">
+  			 select seq_board.nextval from dual
+  		</selectKey>
+  		insert into board(
+  		
+  				bo_no,bo_title,bo_writer,bo_content,bo_date,bo_hit
+  		)values(
+  				#{boNo},#{boTitle},#{boContent},#{boWriter},sysdate,0
+  		
+  		)
+  		
+  	</insert>
+  	<update id="incremenHit" parameterType="int">
+  		update board
+  		set
+  		 bo_hit = bo_hit+1
+  		where bo_no =#{boNo}
+  	
+  	</update>
+  	<select id="selectBoard" parameterType="int" resultType="boardVO">
+  		select 
+  			bo_no,bo_title,bo_writer,bo_content,bo_date,bo_hit
+  		from board
+  		where bo_no =#{boNo}
+
+  	</select>
+  	
+  	<select id="selectBoardList" resultType="boardVO">
+  	select
+  		bo_no,bo_title,bo_writer,bo_content,bo_date,bo_hit
+  	from board
+  	
+  	
+  	</select>
+  	
+  	<update id="updateBoard" parameterType="boardVO">
+  		update board
+  		set
+  			bo_title =#{boTitle},
+  			bo_writer =#{boWriter},
+  			bo_content =#{boContent},
+  			bo_date =sysdate
+  		where bo_no = #{boNo}
+  	</update>
+  	
+  	<delete id="deleteBoard" parameterType="int">
+  	
+  	delete from board
+  	where bo_no = #{boNo}
+  	
+  	</delete>
+  
+  </mapper>
