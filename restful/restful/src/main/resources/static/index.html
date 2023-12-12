@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>난 웰컴파일이얌!</h1>
+<input type="file"  id="myFile" multiple  accept="*.jpg,*.png,*gif"><br>
+<div id="disp"></div>
+<button onclick="fGET()">GET</button>
+<button onclick="fPOST()">POST</button>
+<button onclick="fPOSTFILE()">POSTFILE</button>
+<button onclick="fJQPOSTFILE()">JQPOSTFILE</button><br>
+<button onclick="fPOSTFILES()">POSTFILES</button>
+<button onclick="fJQPOST()">POSTJQ</button>
+<button onclick="fPUT()">PUT</button>
+<button onclick="fDELETE()">DELETE</button>
+<button onclick="fCLONE()">복사 붙여넣깅</button>
+<script>
+    const myDisp = document.querySelector("#disp");
+    const myFile = document.querySelector("#myFile");
+
+    const fPOSTFILES = ()=>{
+                  
+        console.log("누느로 화긴사살:",myFile.files);
+        let formData = new FormData(); // 무조건 enctype="multipart/form-data"
+        formData.append("name","정범우");
+        formData.append("alias","우정없음");
+
+        // input:file에 있는 파일객체들을 옮겨담아 주어야 함
+        for(let i=0; i<myFile.files.length; i++ ){
+            formData.append("files",myFile.files[i]);
+        }  
+
+        let xhr = new XMLHttpRequest();
+        //내용물이 json형식의 문자열임을 알려줘야 함!
+        xhr.open("post","/api/postfile2",true);
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState == 4 && xhr.status == 200){
+                console.log("돌아온 값:",JSON.parse(xhr.responseText));
+                let filePaths = JSON.parse(xhr.responseText); // 배열로 변환
+                
+                for(let i=0; i<filePaths.length; i++){
+                    let newImg = document.createElement("img");
+                    newImg.src = filePaths[i];
+                    newImg.width=100; 
+                    newImg.setAttribute("height","100");
+                    myDisp.appendChild(newImg);
+                }
+            }
+        }
+        xhr.send(formData);  // 문자열화 하지 않음!
+    }
+
+
+
+
+    //jquery ajax 파일업로드
+    const fJQPOSTFILE = ()=>{
+        // 아작스로 파일 보내려면 무조건 FormData가 있어야 함!
+
+        console.log("누느로 화긴사살:",myFile.files);
+        let formData = new FormData(); // 무조건 enctype="multipart/form-data"
+        formData.append("whFile",myFile.files[0]);
+
+        $.ajax({
+            type:"post",
+            url:"/api/postfile",
+            data: formData,
+            contentType:false,  // 필수, 디폴트값 적용 제외
+            processData:false,  // 필수 
+            cache:false,       // 옵션 사항, 권장
+            dataType:"text",
+            success:function(rslt){
+                console.log("돌아온 값:",rslt);
+                
+                let myDiv = document.createElement("div");
+                myDiv.style.display = "inline-block"; // 옆에 친구가 와도 되겡
+                //img 태그 생성
+                let myImg = document.createElement("img"); // 이미지 태그 생성 $("<img>")
+                myImg.src = rslt;  // 파일의 웹경로
+                myImg.width = 200; myImg.height=200;
+                //a 버튼 태그 생성
+                let myATag = document.createElement("a");
+                myATag.innerHTML="다운로드";
+                myATag.href = rslt;
+
+                let filePath = rslt;
+                myATag.download = filePath.substring(filePath.lastIndexOf("/")+1);
+
+                myDiv.appendChild(myImg);
+                myDiv.appendChild(myATag);
+
+                myDisp.appendChild(myDiv); // disp의 자식으로 넣깅(입양이 자유로움)
+            },
+            error: function (request, status, error) {
+                console.log("code: " + request.status)
+                console.log("message: " + request.responseText)
+                console.log("error: " + error);
+            }  
+
+        })
+
+    }
+
+
+
+    const fCLONE = () =>{
+        let myNode = myDisp.cloneNode(true); // 깊은복사-> 자식까지 포함해서 복사!
+        document.body.appendChild(myNode); 
+
+    }
+
+    const fPOSTFILE = ()=>{
+        // 아작스로 파일 보내려면 무조건 FormData가 있어야 함!
+
+        console.log("누느로 화긴사살:",myFile.files);
+        let formData = new FormData(); // 무조건 enctype="multipart/form-data"
+        formData.append("whFile",myFile.files[0]);
+
+
+        let xhr = new XMLHttpRequest();
+        //내용물이 json형식의 문자열임을 알려줘야 함!
+        xhr.open("post","/api/postfile",true);
+//        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState == 4 && xhr.status == 200){
+                console.log("돌아온 값:",xhr.responseText);
+                
+                let myDiv = document.createElement("div");
+                myDiv.style.display = "inline-block"; // 옆에 친구가 와도 되겡
+                //img 태그 생성
+                let myImg = document.createElement("img"); // 이미지 태그 생성 $("<img>")
+                myImg.src = xhr.responseText;  // 파일의 웹경로
+                myImg.width = 200; myImg.height=200;
+                //a 버튼 태그 생성
+                let myATag = document.createElement("a");
+                myATag.innerHTML="다운로드";
+                myATag.href = xhr.responseText;
+
+                let filePath = xhr.responseText;
+                myATag.download = filePath.substring(filePath.lastIndexOf("/")+1);
+
+                /*
+                myButton.onclick = ()=>{
+                    alert("다운로드 할꼉?");
+                }
+                */
+                //정리
+                myDiv.appendChild(myImg);
+                myDiv.appendChild(myATag);
+
+                myDisp.appendChild(myDiv); // disp의 자식으로 넣깅(입양이 자유로움)
+            }
+        }
+        xhr.send(formData);  // 문자열화 하지 않음!
+    }
+
+
+
+    const fJQPOST = ()=>{
+        let dataArr = [];
+
+        for(let i=1; i<=4; i++){
+            let data = {
+                name:`김재성${i}`,
+                age:`3${i}`,
+                alias:"나랑 동갑"
+            }
+            dataArr.push(data);
+        }
+
+        $.ajax({
+            type:"post",
+            url:"/api/postvo",
+            async:true,   // 생략가능
+            contentType:"application/json",
+            data:JSON.stringify(dataArr),
+            dataType:"json",  // 시작은 text로 하는게 좋음
+            success:function(rslt){
+                console.log("항상체크",rslt);
+            },
+            error: function (request, status, error) {
+                console.log("code: " + request.status)
+                console.log("message: " + request.responseText)
+                console.log("error: " + error);
+            }  
+        })
+    }
+
+
+    const fPOST = ()=>{
+        let dataArr = [];
+
+        for(let i=1; i<=4; i++){
+            let data = {
+                name:`김재성${i}`,
+                age:`3${i}`,
+                alias:"나랑 동갑"
+            }
+            dataArr.push(data);
+        }
+
+        let xhr = new XMLHttpRequest();
+        //내용물이 json형식의 문자열임을 알려줘야 함!
+        xhr.open("post","/api/post",true);
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState == 4 && xhr.status == 200){
+                console.log("돌아온 값:",xhr.responseText);
+            }
+        }
+        xhr.send(JSON.stringify(dataArr));  // 문자열로 보냄!
+    }
+</script>
+</body>
+</html>
